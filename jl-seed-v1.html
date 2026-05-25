@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>23 Months Together 💙</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Quicksand:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0a0e1a;
+    --deep-blue: #0d1b3e;
+    --mid-blue: #1a3a6b;
+    --cyan: #4dd9f7;
+    --soft-cyan: #a8eaf7;
+    --pastel-blue: #c5e8ff;
+    --cloud-white: #e8f4ff;
+    --glow-cyan: #00d4ff;
+    --pixel-gold: #ffd700;
+    --pixel-green: #5dde5d;
+    --heart-pink: #ff8fb1;
+    --moon-yellow: #fffacd;
+    --glass-bg: rgba(13, 27, 62, 0.6);
+    --glass-border: rgba(77, 217, 247, 0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Quicksand', sans-serif;
+    background: var(--navy);
+    color: var(--cloud-white);
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* ===================== PIXEL FONT ===================== */
+  .pixel { font-family: 'Press Start 2P', monospace; }
+
+  /* ===================== SKY BACKGROUND ===================== */
+  #sky-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .section-wrapper {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ===================== PARTICLES ===================== */
+  #particles {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* ===================== NAV ===================== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 12px 24px;
+    background: rgba(10,14,26,0.85);
+    border-bottom: 2px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-logo {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 10px;
+    color: var(--cyan);
+    text-shadow: 0 0 10px var(--cyan);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: var(--soft-cyan);
+    text-decoration: none;
+    transition: color 0.2s, text-shadow 0.2s;
+  }
+
+  .nav-links a:hover {
+    color: var(--cyan);
+    text-shadow: 0 0 8px var(--cyan);
+  }
+
+  .music-btn {
+    background: var(--glass-bg);
+    border: 2px solid var(--glass-border);
+    color: var(--cyan);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    image-rendering: pixelated;
+  }
+
+  .music-btn:hover {
+    background: rgba(77,217,247,0.2);
+    border-color: var(--cyan);
+    box-shadow: 0 0 12px var(--cyan);
+  }
+
+  /* ===================== HERO ===================== */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 100px 20px 60px;
+    position: relative;
+  }
+
+  .hero-badge {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: var(--pixel-gold);
+    text-shadow: 0 0 10px var(--pixel-gold);
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    animation: pulse-glow 2s infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  .hero-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(22px, 5vw, 52px);
+    color: var(--cloud-white);
+    text-shadow: 0 0 20px var(--cyan), 0 0 40px rgba(77,217,247,0.4);
+    line-height: 1.4;
+    margin-bottom: 16px;
+    animation: title-in 1s ease-out forwards;
+  }
+
+  @keyframes title-in {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero-subtitle {
+    font-size: 18px;
+    color: var(--soft-cyan);
+    letter-spacing: 4px;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  /* Pixel hearts decoration */
+  .pixel-hearts {
+    font-size: 20px;
+    margin-bottom: 30px;
+    animation: float-hearts 3s ease-in-out infinite;
+  }
+
+  @keyframes float-hearts {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* ===================== COUNTDOWN ===================== */
+  .countdown-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    max-width: 680px;
+    width: 100%;
+    margin: 0 auto 40px;
+  }
+
+  .count-block {
+    background: var(--glass-bg);
+    border: 3px solid var(--glass-border);
+    padding: 24px 12px;
+    text-align: center;
+    position: relative;
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s, box-shadow 0.2s;
+    image-rendering: pixelated;
+    box-shadow: 0 0 20px rgba(77,217,247,0.1), inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+
+  .count-block::before {
+    content: '';
+    position: absolute;
+    top: -3px; left: -3px; right: -3px; bottom: -3px;
+    border: 1px solid rgba(77,217,247,0.1);
+    pointer-events: none;
+  }
+
+  .count-block:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(77,217,247,0.3);
+    border-color: var(--cyan);
+  }
+
+  .count-number {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(28px, 5vw, 48px);
+    color: var(--cyan);
+    text-shadow: 0 0 15px var(--cyan), 0 0 30px rgba(77,217,247,0.5);
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .count-label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: var(--pastel-blue);
+    letter-spacing: 1px;
+    opacity: 0.8;
+  }
+
+  .hero-quote {
+    font-size: 15px;
+    color: var(--soft-cyan);
+    font-style: italic;
+    max-width: 500px;
+    line-height: 1.8;
+    opacity: 0.9;
+    margin-bottom: 20px;
+  }
+
+  .hero-quote::before { content: '" '; color: var(--cyan); }
+  .hero-quote::after { content: ' "'; color: var(--cyan); }
+
+  /* Next milestone badge */
+  #next-milestone-badge {
+    background: var(--glass-bg);
+    border: 2px solid var(--glass-border);
+    padding: 12px 24px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    color: var(--pixel-gold);
+    margin-top: 20px;
+    backdrop-filter: blur(10px);
+  }
+
+  /* Scroll indicator */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: var(--soft-cyan);
+    opacity: 0.6;
+    animation: bounce 2s infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+  }
+
+  /* ===================== PIXEL CHARACTERS ===================== */
+  .pixel-scene {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 8px;
+    margin: 30px 0;
+    height: 80px;
+  }
+
+  .pixel-char {
+    image-rendering: pixelated;
+    width: 48px;
+    height: 64px;
+    animation: char-idle 1.5s steps(2) infinite;
+  }
+
+  @keyframes char-idle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+
+  .pixel-char-p2 { animation-delay: 0.75s; }
+
+  /* ===================== GLASS PANEL ===================== */
+  .glass-panel {
+    background: var(--glass-bg);
+    border: 2px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    padding: 40px;
+    position: relative;
+    box-shadow: 0 0 40px rgba(77,217,247,0.05);
+  }
+
+  .glass-panel::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+    opacity: 0.4;
+  }
+
+  /* ===================== SECTIONS ===================== */
+  section {
+    padding: 80px 20px;
+  }
+
+  .section-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(14px, 3vw, 22px);
+    color: var(--cyan);
+    text-shadow: 0 0 15px var(--cyan);
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .section-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 50px;
+  }
+
+  .divider-line {
+    height: 2px;
+    width: 80px;
+    background: linear-gradient(90deg, transparent, var(--cyan));
+  }
+
+  .divider-line.right {
+    background: linear-gradient(90deg, var(--cyan), transparent);
+  }
+
+  .divider-icon {
+    font-size: 16px;
+  }
+
+  /* ===================== TIMELINE ===================== */
+  #timeline {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .timeline-wrapper {
+    position: relative;
+    padding-left: 40px;
+  }
+
+  .timeline-wrapper::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--cyan), rgba(77,217,247,0.1));
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 40px;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+
+  .timeline-item.visible {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: -35px;
+    top: 8px;
+    width: 16px;
+    height: 16px;
+    background: var(--navy);
+    border: 3px solid var(--cyan);
+    image-rendering: pixelated;
+    box-shadow: 0 0 10px var(--cyan);
+  }
+
+  .timeline-content {
+    background: var(--glass-bg);
+    border: 2px solid var(--glass-border);
+    padding: 20px;
+    backdrop-filter: blur(8px);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+
+  .timeline-content:hover {
+    border-color: var(--cyan);
+    box-shadow: 0 0 20px rgba(77,217,247,0.2);
+  }
+
+  .timeline-date {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    color: var(--pixel-gold);
+    margin-bottom: 8px;
+  }
+
+  .timeline-event {
+    font-size: 15px;
+    color: var(--cloud-white);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .timeline-desc {
+    font-size: 13px;
+    color: var(--soft-cyan);
+    line-height: 1.7;
+    opacity: 0.85;
+  }
+
+  /* ===================== MEMORY CARDS ===================== */
+  #our-world {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 24px;
+  }
+
+  .memory-card {
+    background: var(--glass-bg);
+    border: 3px solid var(--glass-border);
+    backdrop-filter: blur(10px);
+    padding: 28px 24px;
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+    cursor: default;
+    overflow: hidden;
+  }
+
+  .memory-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(77,217,247,0.06), transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .memory-card:hover::before { opacity: 1; }
+
+  .memory-card:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 12px 40px rgba(77,217,247,0.25);
+    border-color: var(--cyan);
+  }
+
+  .card-icon {
+    font-size: 36px;
+    margin-bottom: 16px;
+    display: block;
+    filter: drop-shadow(0 0 8px rgba(77,217,247,0.6));
+    animation: icon-float 3s ease-in-out infinite;
+  }
+
+  @keyframes icon-float {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-5px) scale(1.05); }
+  }
+
+  .card-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: var(--cyan);
+    margin-bottom: 12px;
+  }
+
+  .card-text {
+    font-size: 13px;
+    color: var(--soft-cyan);
+    line-height: 1.8;
+    opacity: 0.9;
+  }
+
+  /* ===================== FUTURE GOALS ===================== */
+  #future-goals {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .goals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+
+  .goal-item {
+    background: var(--glass-bg);
+    border: 2px solid var(--glass-border);
+    padding: 24px 20px;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    transition: all 0.3s;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .goal-item:hover {
+    border-color: var(--pixel-gold);
+    box-shadow: 0 0 20px rgba(255,215,0,0.2);
+    transform: scale(1.03);
+  }
+
+  .goal-item.completed::after {
+    content: '✓';
+    position: absolute;
+    top: 8px; right: 10px;
+    color: var(--pixel-green);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+  }
+
+  .goal-icon { font-size: 28px; margin-bottom: 12px; display: block; }
+
+  .goal-title {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: var(--pastel-blue);
+    line-height: 1.6;
+  }
+
+  /* ===================== ENCHANTED BOOK ===================== */
+  #love-letter {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .enchanted-book {
+    background: linear-gradient(135deg, rgba(10,20,50,0.95), rgba(13,27,62,0.9));
+    border: 4px solid var(--mid-blue);
+    padding: 50px 44px;
+    position: relative;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 60px rgba(77,217,247,0.15), inset 0 0 40px rgba(77,217,247,0.05);
+  }
+
+  .enchanted-book::before {
+    content: '✦ ENCHANTED ✦';
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: var(--pixel-gold);
+    background: var(--navy);
+    padding: 0 12px;
+    text-shadow: 0 0 8px var(--pixel-gold);
+  }
+
+  .enchanted-book::after {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border: 1px solid rgba(77,217,247,0.1);
+    pointer-events: none;
+  }
+
+  .book-spine {
+    position: absolute;
+    left: 20px; top: 0; bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--cyan), var(--mid-blue));
+    opacity: 0.5;
+  }
+
+  .book-text {
+    font-size: 15px;
+    line-height: 2.1;
+    color: var(--cloud-white);
+    opacity: 0.92;
+    font-weight: 300;
+  }
+
+  .book-text p { margin-bottom: 20px; }
+
+  .book-text p:first-child::first-letter {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 28px;
+    float: left;
+    margin-right: 8px;
+    margin-top: 4px;
+    color: var(--cyan);
+    text-shadow: 0 0 12px var(--cyan);
+    line-height: 1;
+  }
+
+  .book-signature {
+    text-align: right;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    color: var(--pixel-gold);
+    text-shadow: 0 0 8px var(--pixel-gold);
+    margin-top: 20px;
+  }
+
+  .enchanted-glyphs {
+    text-align: center;
+    font-size: 18px;
+    letter-spacing: 8px;
+    opacity: 0.4;
+    margin: 20px 0;
+    animation: glyph-shimmer 4s ease-in-out infinite;
+  }
+
+  @keyframes glyph-shimmer {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.8; text-shadow: 0 0 10px var(--cyan); }
+  }
+
+  /* ===================== ANNIVERSARY COUNTDOWN ===================== */
+  #anniversary {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .anniversary-box {
+    background: linear-gradient(135deg, rgba(10,14,26,0.9), rgba(13,27,62,0.8));
+    border: 3px solid rgba(255,215,0,0.4);
+    padding: 50px 40px;
+    box-shadow: 0 0 60px rgba(255,215,0,0.1), 0 0 120px rgba(77,217,247,0.05);
+    position: relative;
+    backdrop-filter: blur(15px);
+  }
+
+  .anniversary-box::before {
+    content: '⭐ 2ND ANNIVERSARY ⭐';
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: var(--pixel-gold);
+    background: var(--navy);
+    padding: 0 12px;
+    white-space: nowrap;
+    text-shadow: 0 0 8px var(--pixel-gold);
+  }
+
+  .anniv-date {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(10px, 2.5vw, 16px);
+    color: var(--pixel-gold);
+    text-shadow: 0 0 12px var(--pixel-gold);
+    margin-bottom: 16px;
+  }
+
+  .anniv-subtitle {
+    font-size: 14px;
+    color: var(--soft-cyan);
+    margin-bottom: 36px;
+    opacity: 0.8;
+  }
+
+  .anniv-countdown {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    max-width: 520px;
+    margin: 0 auto 30px;
+  }
+
+  .anniv-block {
+    background: rgba(255,215,0,0.08);
+    border: 2px solid rgba(255,215,0,0.3);
+    padding: 20px 10px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  .anniv-block:hover {
+    border-color: var(--pixel-gold);
+    box-shadow: 0 0 15px rgba(255,215,0,0.3);
+  }
+
+  .anniv-number {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(20px, 4vw, 36px);
+    color: var(--pixel-gold);
+    text-shadow: 0 0 12px var(--pixel-gold);
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .anniv-label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 6px;
+    color: var(--moon-yellow);
+    opacity: 0.7;
+  }
+
+  /* ===================== FOOTER ===================== */
+  footer {
+    text-align: center;
+    padding: 40px 20px;
+    border-top: 2px solid var(--glass-border);
+    font-family: 'Press Start 2P', monospace;
+    font-size: 7px;
+    color: var(--soft-cyan);
+    opacity: 0.5;
+    line-height: 2.5;
+  }
+
+  /* ===================== PIXEL SVG CHARS ===================== */
+  .scene-container {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 20px;
+    margin: 30px auto;
+    height: 100px;
+  }
+
+  /* ===================== LANTERNS ===================== */
+  .lantern {
+    display: inline-block;
+    width: 14px;
+    height: 18px;
+    background: rgba(77,217,247,0.4);
+    border: 2px solid var(--cyan);
+    box-shadow: 0 0 12px var(--cyan), 0 0 25px rgba(77,217,247,0.3);
+    position: relative;
+    animation: lantern-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes lantern-glow {
+    0%, 100% { box-shadow: 0 0 12px var(--cyan), 0 0 25px rgba(77,217,247,0.3); }
+    50% { box-shadow: 0 0 20px var(--cyan), 0 0 40px rgba(77,217,247,0.5); }
+  }
+
+  /* ===================== WATER REFLECTION ===================== */
+  .water-bar {
+    height: 6px;
+    background: linear-gradient(90deg, transparent, var(--cyan), var(--mid-blue), var(--cyan), transparent);
+    opacity: 0.4;
+    animation: water-ripple 3s ease-in-out infinite;
+    margin: 10px 0;
+  }
+
+  @keyframes water-ripple {
+    0%, 100% { transform: scaleX(1); opacity: 0.4; }
+    50% { transform: scaleX(0.97); opacity: 0.6; }
+  }
+
+  /* ===================== RESPONSIVE ===================== */
+  @media (max-width: 600px) {
+    .countdown-grid { grid-template-columns: repeat(2, 1fr); }
+    .anniv-countdown { grid-template-columns: repeat(2, 1fr); }
+    .glass-panel { padding: 24px 16px; }
+    .enchanted-book { padding: 36px 24px; }
+    nav { padding: 10px 14px; }
+    .nav-links { display: none; }
+  }
+
+  /* ===================== SCROLL REVEAL ===================== */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ===================== MILESTONE SECTION ===================== */
+  .milestone-info {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 8px;
+    color: var(--soft-cyan);
+    text-align: center;
+    line-height: 2;
+    opacity: 0.7;
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Background Canvas -->
+<canvas id="sky-canvas"></canvas>
+<canvas id="particles"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">💙 P1 × P2</div>
+  <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#timeline">Story</a></li>
+    <li><a href="#our-world">World</a></li>
+    <li><a href="#love-letter">Letter</a></li>
+    <li><a href="#anniversary">Anniv</a></li>
+  </ul>
+  <button class="music-btn" id="musicBtn" onclick="toggleMusic()">♪ MUSIC</button>
+</nav>
+
+<!-- HIDDEN AUDIO -->
+<audio id="bgMusic" loop>
+  <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
+</audio>
+
+<!-- ============================================================ -->
+<!-- HERO SECTION -->
+<!-- ============================================================ -->
+<div class="section-wrapper">
+<section id="hero">
+  <div class="hero-badge" id="monthBadge">✦ MONTHSARY ✦</div>
+
+  <!-- Pixel scene with two characters (inline SVG pixel art) -->
+  <div class="scene-container">
+    <!-- Player 1 -->
+    <svg width="48" height="64" viewBox="0 0 12 16" style="image-rendering:pixelated;animation:char-idle 1.5s steps(2) infinite;">
+      <rect x="3" y="0" width="6" height="6" fill="#c5a87a"/>
+      <rect x="3" y="0" width="6" height="2" fill="#3a2510"/>
+      <rect x="2" y="6" width="8" height="6" fill="#4dd9f7"/>
+      <rect x="3" y="6" width="6" height="1" fill="#a8eaf7"/>
+      <rect x="1" y="6" width="2" height="5" fill="#4dd9f7"/>
+      <rect x="9" y="6" width="2" height="5" fill="#4dd9f7"/>
+      <rect x="3" y="12" width="2" height="4" fill="#1a3a6b"/>
+      <rect x="7" y="12" width="2" height="4" fill="#1a3a6b"/>
+      <rect x="4" y="2" width="1" height="1" fill="#2a1a00"/>
+      <rect x="7" y="2" width="1" height="1" fill="#2a1a00"/>
+      <rect x="4" y="4" width="4" height="1" fill="#c06040"/>
+    </svg>
+    <!-- Heart between them -->
+    <div style="font-size:24px;padding-bottom:8px;animation:pulse-glow 1.5s infinite;color:#ff8fb1;filter:drop-shadow(0 0 8px #ff8fb1);">♥</div>
+    <!-- Player 2 -->
+    <svg width="48" height="64" viewBox="0 0 12 16" style="image-rendering:pixelated;animation:char-idle 1.5s steps(2) 0.75s infinite;">
+      <rect x="3" y="0" width="6" height="6" fill="#e8b090"/>
+      <rect x="3" y="0" width="6" height="1" fill="#8b4513"/>
+      <rect x="2" y="0" width="1" height="4" fill="#8b4513"/>
+      <rect x="9" y="0" width="1" height="4" fill="#8b4513"/>
+      <rect x="2" y="6" width="8" height="6" fill="#ff8fb1"/>
+      <rect x="3" y="6" width="6" height="1" fill="#ffb3cc"/>
+      <rect x="1" y="6" width="2" height="5" fill="#ff8fb1"/>
+      <rect x="9" y="6" width="2" height="5" fill="#ff8fb1"/>
+      <rect x="3" y="12" width="2" height="4" fill="#c5e8ff"/>
+      <rect x="7" y="12" width="2" height="4" fill="#c5e8ff"/>
+      <rect x="4" y="2" width="1" height="1" fill="#2a1a00"/>
+      <rect x="7" y="2" width="1" height="1" fill="#2a1a00"/>
+      <rect x="4" y="4" width="4" height="1" fill="#c06040"/>
+    </svg>
+  </div>
+
+  <h1 class="hero-title" id="heroTitle">23 Months<br>Together</h1>
+  <p class="hero-subtitle">Since June 27, 2024 &nbsp;💙</p>
+
+  <!-- Water reflection bars -->
+  <div style="width:200px;margin:0 auto;">
+    <div class="water-bar"></div>
+    <div class="water-bar" style="animation-delay:0.5s;opacity:0.25;"></div>
+    <div class="water-bar" style="animation-delay:1s;opacity:0.15;"></div>
+  </div>
+
+  <!-- MAIN COUNTDOWN -->
+  <div class="countdown-grid" id="mainCountdown">
+    <div class="count-block">
+      <span class="count-number" id="cd-days">00</span>
+      <span class="count-label">DAYS</span>
+    </div>
+    <div class="count-block">
+      <span class="count-number" id="cd-hours">00</span>
+      <span class="count-label">HOURS</span>
+    </div>
+    <div class="count-block">
+      <span class="count-number" id="cd-minutes">00</span>
+      <span class="count-label">MINS</span>
+    </div>
+    <div class="count-block">
+      <span class="count-number" id="cd-seconds">00</span>
+      <span class="count-label">SECS</span>
+    </div>
+  </div>
+
+  <p class="hero-quote">Every level with you became my favorite adventure.</p>
+
+  <div id="next-milestone-badge">📅 NEXT: <span id="nextMilestoneText">Loading...</span></div>
+
+  <div class="milestone-info" id="milestoneInfo"></div>
+
+  <!-- Lantern row -->
+  <div style="display:flex;gap:20px;justify-content:center;margin-top:30px;align-items:flex-end;">
+    <span style="font-size:10px;font-family:'Press Start 2P',monospace;color:var(--soft-cyan);opacity:0.5;">🏮</span>
+    <div class="lantern"></div>
+    <div class="lantern" style="animation-delay:0.5s;height:22px;"></div>
+    <div class="lantern" style="animation-delay:1s;height:16px;"></div>
+    <div class="lantern" style="animation-delay:1.5s;height:22px;"></div>
+    <div class="lantern" style="animation-delay:0.7s;"></div>
+    <span style="font-size:10px;font-family:'Press Start 2P',monospace;color:var(--soft-cyan);opacity:0.5;">🏮</span>
+  </div>
+
+  <div class="scroll-indicator">▼ SCROLL TO EXPLORE ▼</div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TIMELINE -->
+<!-- ============================================================ -->
+<section id="timeline-section" style="background: linear-gradient(180deg, transparent, rgba(13,27,62,0.3), transparent);">
+  <div class="section-title reveal">OUR STORY</div>
+  <div class="section-divider reveal">
+    <div class="divider-line"></div>
+    <span class="divider-icon">📖</span>
+    <div class="divider-line right"></div>
+  </div>
+
+  <div id="timeline" class="reveal">
+    <div class="timeline-wrapper">
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-date">JUNE 27, 2024</div>
+          <div class="timeline-event">💙 First Date — World Spawned</div>
+          <div class="timeline-desc">The day everything started. Two players met, and a new world was created — one block, one smile, one moment at a time.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-date">MONTH 1</div>
+          <div class="timeline-event">🌱 First Month — Wooden Tools Era</div>
+          <div class="timeline-desc">Getting to know each other. Learning each other's quirks, favorite things, and the little details that make you, you.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-date">MONTH 6</div>
+          <div class="timeline-event">⚔️ Half-Year — Iron Age Unlocked</div>
+          <div class="timeline-desc">Six months of laughter, late-night calls, and building something neither of us planned but both of us wanted.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-date">MONTH 12</div>
+          <div class="timeline-event">🏆 First Anniversary — Diamond Reached</div>
+          <div class="timeline-desc">One whole year. A full orbit around the sun — together. The world kept spinning and you were always beside me.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <div class="timeline-date">MONTH 23</div>
+          <div class="timeline-event">💎 Today — Netherite Tier</div>
+          <div class="timeline-desc">Twenty-three months. Still here. Still choosing each other. Still building. The best adventure has no end screen.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- OUR WORLD -->
+<!-- ============================================================ -->
+<section id="our-world">
+  <div class="section-title reveal">OUR WORLD</div>
+  <div class="section-divider reveal">
+    <div class="divider-line"></div>
+    <span class="divider-icon">🌍</span>
+    <div class="divider-line right"></div>
+  </div>
+
+  <div class="cards-grid reveal">
+    <div class="memory-card">
+      <span class="card-icon">🌙</span>
+      <div class="card-title">LATE NIGHTS</div>
+      <div class="card-text">The hours that blur into morning. Every late-night conversation that felt like its own little world.</div>
+    </div>
+    <div class="memory-card">
+      <span class="card-icon">🎮</span>
+      <div class="card-title">GAMER COUPLE</div>
+      <div class="card-text">We speak the same language — respawn, co-op, and "one more game." You're my favorite player two.</div>
+    </div>
+    <div class="memory-card">
+      <span class="card-icon">☕</span>
+      <div class="card-title">QUIET MOMENTS</div>
+      <div class="card-text">Comfortable silences that say everything. Being together without needing anything else.</div>
+    </div>
+    <div class="memory-card">
+      <span class="card-icon">💬</span>
+      <div class="card-title">INSIDE JOKES</div>
+      <div class="card-text">A whole language only we understand. References that live rent-free in both our heads forever.</div>
+    </div>
+    <div class="memory-card">
+      <span class="card-icon">🌅</span>
+      <div class="card-title">NEW BEGINNINGS</div>
+      <div class="card-text">Every morning is a new chunk loading. Fresh possibilities, same wonderful company.</div>
+    </div>
+    <div class="memory-card">
+      <span class="card-icon">🧱</span>
+      <div class="card-title">BUILT TOGETHER</div>
+      <div class="card-text">Block by block, we've built something real. Something neither of us could have made alone.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- FUTURE GOALS -->
+<!-- ============================================================ -->
+<section id="future-goals" style="background: linear-gradient(180deg, transparent, rgba(13,27,62,0.3), transparent);">
+  <div class="section-title reveal">FUTURE QUESTS</div>
+  <div class="section-divider reveal">
+    <div class="divider-line"></div>
+    <span class="divider-icon">⭐</span>
+    <div class="divider-line right"></div>
+  </div>
+
+  <div class="goals-grid reveal">
+    <div class="goal-item completed">
+      <span class="goal-icon">🗺️</span>
+      <div class="goal-title">FIRST YEAR TOGETHER</div>
+    </div>
+    <div class="goal-item">
+      <span class="goal-icon">✈️</span>
+      <div class="goal-title">TRAVEL SOMEWHERE NEW</div>
+    </div>
+    <div class="goal-item">
+      <span class="goal-icon">🎂</span>
+      <div class="goal-title">2ND ANNIVERSARY</div>
+    </div>
+    <div class="goal-item">
+      <span class="goal-icon">🏠</span>
+      <div class="goal-title">BUILD A HOME BASE</div>
+    </div>
+    <div class="goal-item">
+      <span class="goal-icon">🌌</span>
+      <div class="goal-title">STARGAZE TOGETHER</div>
+    </div>
+    <div class="goal-item">
+      <span class="goal-icon">🎵</span>
+      <div class="goal-title">FIND OUR SONG</div>
+    </div>
+    <div class="goal-item">
+      <span class="goal-icon">🐾</span>
+      <div class="goal-title">ADOPT A PET</div>
+    </div>
+    <div class="goal-item">
+      <span class="goal-icon">♾️</span>
+      <div class="goal-title">KEEP CHOOSING EACH OTHER</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- LOVE LETTER -->
+<!-- ============================================================ -->
+<section id="love-letter">
+  <div class="section-title reveal">ENCHANTED LETTER</div>
+  <div class="section-divider reveal">
+    <div class="divider-line"></div>
+    <span class="divider-icon">📜</span>
+    <div class="divider-line right"></div>
+  </div>
+
+  <div class="enchanted-book reveal">
+    <div class="book-spine"></div>
+    <div class="enchanted-glyphs">✦ ᚠ ᚢ ᚦ ᚨ ✦ ᚱ ᚲ ᚷ ✦</div>
+
+    <div class="book-text">
+      <p>
+        I never expected a first date to rewrite everything. But here we are — twenty-three months deep into a story I didn't see coming and never want to close.
+      </p>
+      <p>
+        You make ordinary days feel like lore. The mundane becomes memorable when it's with you. Late nights become legend. Small moments become permanent saves.
+      </p>
+      <p>
+        Every argument we've survived is just a boss fight we cleared together. Every quiet afternoon is a peaceful biome we found. Every time you laugh, I want to mark it on a map and go back there forever.
+      </p>
+      <p>
+        Twenty-three months is a lot of loaded chunks. A lot of sunrises, a lot of respawns, a lot of "I'm glad you're here." And I'd choose all of it again — every single block of it.
+      </p>
+      <p>
+        This isn't a game I'll ever want to quit.
+      </p>
+    </div>
+
+    <div class="enchanted-glyphs">✦ ᛏ ᛒ ᛖ ᛗ ✦ ᛚ ᛜ ᛞ ✦</div>
+
+    <div class="book-signature">
+      — with 💙, always &nbsp;&nbsp;
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 2ND ANNIVERSARY COUNTDOWN -->
+<!-- ============================================================ -->
+<section id="anniversary">
+  <div class="section-title reveal" style="color:var(--pixel-gold);text-shadow:0 0 15px var(--pixel-gold);">THE BIG ONE</div>
+  <div class="section-divider reveal">
+    <div class="divider-line"></div>
+    <span class="divider-icon">🏆</span>
+    <div class="divider-line right"></div>
+  </div>
+
+  <div class="anniversary-box reveal">
+    <div class="anniv-date">JUNE 27, 2026</div>
+    <div class="anniv-subtitle">Two full years of choosing each other 💛</div>
+
+    <div class="anniv-countdown">
+      <div class="anniv-block">
+        <span class="anniv-number" id="a-days">--</span>
+        <span class="anniv-label">DAYS</span>
+      </div>
+      <div class="anniv-block">
+        <span class="anniv-number" id="a-hours">--</span>
+        <span class="anniv-label">HOURS</span>
+      </div>
+      <div class="anniv-block">
+        <span class="anniv-number" id="a-minutes">--</span>
+        <span class="anniv-label">MINS</span>
+      </div>
+      <div class="anniv-block">
+        <span class="anniv-number" id="a-seconds">--</span>
+        <span class="anniv-label">SECS</span>
+      </div>
+    </div>
+
+    <p style="font-size:13px;color:var(--soft-cyan);opacity:0.8;line-height:1.9;max-width:480px;margin:0 auto;">
+      "Two years doesn't feel like enough, but it's a beautiful place to start. Here's to every year after this one — still co-op, still together, still building."
+    </p>
+
+    <!-- Firework dots -->
+    <div style="margin-top:24px;font-size:22px;letter-spacing:10px;animation:pulse-glow 2s infinite;">
+      ⭐ 💙 ✨ 💛 ⭐
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>BUILT WITH LOVE, PIXEL BY PIXEL &nbsp;💙</div>
+  <div style="margin-top:8px;">JUNE 27, 2024 → FOREVER</div>
+  <div style="margin-top:8px;opacity:0.3;">[ PLAYER 1 × PLAYER 2 — CO-OP MODE ]</div>
+</footer>
+
+</div><!-- end section-wrapper -->
+
+<!-- ============================================================ -->
+<!-- JAVASCRIPT -->
+<!-- ============================================================ -->
+<script>
+// ==================== MILESTONE LOGIC ====================
+const START_DATE = new Date('2024-06-27T00:00:00');
+
+function getNextMilestone() {
+  const now = new Date();
+  const monthsElapsed = (now.getFullYear() - START_DATE.getFullYear()) * 12 + (now.getMonth() - START_DATE.getMonth());
+  let targetMonth = monthsElapsed + 1;
+
+  // Determine correct next milestone
+  const nextDate = new Date(START_DATE);
+  nextDate.setMonth(START_DATE.getMonth() + targetMonth);
+  nextDate.setDate(27);
+
+  const anniversaryYear = Math.floor(targetMonth / 12);
+  const isAnniversary = targetMonth % 12 === 0;
+
+  return { date: nextDate, months: targetMonth, isAnniversary, anniversaryYear };
+}
+
+function getCurrentMilestone() {
+  const now = new Date();
+  const elapsed = (now.getFullYear() - START_DATE.getFullYear()) * 12 + (now.getMonth() - START_DATE.getMonth());
+  const milestoneDate = new Date(START_DATE);
+  milestoneDate.setMonth(START_DATE.getMonth() + elapsed);
+  milestoneDate.setDate(27);
+
+  // Is today on or before the 27th of current month?
+  if (now >= milestoneDate) {
+    return { months: elapsed, date: milestoneDate };
+  } else {
+    return { months: elapsed - 1, date: new Date(milestoneDate.setMonth(milestoneDate.getMonth() - 1)) };
+  }
+}
+
+function pad(n) { return String(Math.floor(n)).padStart(2, '0'); }
+
+function updateCountdowns() {
+  const now = new Date();
+  const current = getCurrentMilestone();
+  const next = getNextMilestone();
+
+  // Update hero title
+  document.getElementById('heroTitle').innerHTML = `${current.months} Months<br>Together`;
+  document.getElementById('monthBadge').textContent = `✦ ${current.months} MONTHSARY ✦`;
+
+  // Main countdown to NEXT milestone
+  const diff = next.date - now;
+  if (diff > 0) {
+    const days = diff / (1000*60*60*24);
+    const hours = (diff % (1000*60*60*24)) / (1000*60*60);
+    const mins  = (diff % (1000*60*60)) / (1000*60);
+    const secs  = (diff % (1000*60)) / 1000;
+    document.getElementById('cd-days').textContent = pad(days);
+    document.getElementById('cd-hours').textContent = pad(hours);
+    document.getElementById('cd-minutes').textContent = pad(mins);
+    document.getElementById('cd-seconds').textContent = pad(secs);
+  } else {
+    document.getElementById('cd-days').textContent = '00';
+    document.getElementById('cd-hours').textContent = '00';
+    document.getElementById('cd-minutes').textContent = '00';
+    document.getElementById('cd-seconds').textContent = '00';
+  }
+
+  // Next milestone text
+  const nextLabel = next.isAnniversary
+    ? `🏆 ${next.anniversaryYear}ND ANNIVERSARY (Month ${next.months})`
+    : `💙 ${next.months} MONTHS`;
+  document.getElementById('nextMilestoneText').textContent = nextLabel;
+  document.getElementById('milestoneInfo').textContent = `⏳ Counting to: Month ${next.months} — ${next.date.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}`;
+
+  // 2nd Anniversary countdown
+  const annivDate = new Date('2026-06-27T00:00:00');
+  const aDiff = annivDate - now;
+  if (aDiff > 0) {
+    document.getElementById('a-days').textContent = pad(aDiff / (1000*60*60*24));
+    document.getElementById('a-hours').textContent = pad((aDiff % (1000*60*60*24)) / (1000*60*60));
+    document.getElementById('a-minutes').textContent = pad((aDiff % (1000*60*60)) / (1000*60));
+    document.getElementById('a-seconds').textContent = pad((aDiff % (1000*60)) / 1000);
+  } else {
+    document.getElementById('a-days').textContent = '🎉';
+    document.getElementById('a-hours').textContent = '🎉';
+    document.getElementById('a-minutes').textContent = '🎉';
+    document.getElementById('a-seconds').textContent = '🎉';
+  }
+}
+
+setInterval(updateCountdowns, 1000);
+updateCountdowns();
+
+// ==================== SKY / STARS CANVAS ====================
+const skyCanvas = document.getElementById('sky-canvas');
+const skyCtx = skyCanvas.getContext('2d');
+
+function resizeSky() {
+  skyCanvas.width = window.innerWidth;
+  skyCanvas.height = window.innerHeight;
+}
+resizeSky();
+window.addEventListener('resize', resizeSky);
+
+const stars = [];
+for (let i = 0; i < 180; i++) {
+  stars.push({
+    x: Math.random(),
+    y: Math.random() * 0.7,
+    size: Math.random() * 2.5 + 0.5,
+    twinkle: Math.random() * Math.PI * 2,
+    speed: Math.random() * 0.02 + 0.005,
+  });
+}
+
+const clouds = [];
+for (let i = 0; i < 6; i++) {
+  clouds.push({
+    x: Math.random() * 2,
+    y: 0.05 + Math.random() * 0.3,
+    w: 80 + Math.random() * 120,
+    h: 30 + Math.random() * 40,
+    speed: 0.00015 + Math.random() * 0.0001,
+    alpha: 0.06 + Math.random() * 0.08,
+  });
+}
+
+// Moon
+const moon = { x: 0.82, y: 0.12, r: 32 };
+
+let skyTick = 0;
+
+function drawSky() {
+  const W = skyCanvas.width, H = skyCanvas.height;
+  skyTick += 0.008;
+
+  // Gradient sky
+  const grad = skyCtx.createLinearGradient(0, 0, 0, H);
+  grad.addColorStop(0, '#060a15');
+  grad.addColorStop(0.4, '#0a0e1a');
+  grad.addColorStop(0.7, '#0d1b3e');
+  grad.addColorStop(1, '#0a1628');
+  skyCtx.fillStyle = grad;
+  skyCtx.fillRect(0, 0, W, H);
+
+  // Moon glow
+  const mg = skyCtx.createRadialGradient(moon.x*W, moon.y*H, 0, moon.x*W, moon.y*H, 120);
+  mg.addColorStop(0, 'rgba(200,230,255,0.08)');
+  mg.addColorStop(1, 'transparent');
+  skyCtx.fillStyle = mg;
+  skyCtx.fillRect(0, 0, W, H);
+
+  // Moon
+  skyCtx.save();
+  const moonX = moon.x * W, moonY = moon.y * H;
+  const moonGlow = skyCtx.createRadialGradient(moonX, moonY, 0, moonX, moonY, moon.r * 2.5);
+  moonGlow.addColorStop(0, 'rgba(220,240,255,0.25)');
+  moonGlow.addColorStop(1, 'transparent');
+  skyCtx.fillStyle = moonGlow;
+  skyCtx.beginPath();
+  skyCtx.arc(moonX, moonY, moon.r * 2.5, 0, Math.PI * 2);
+  skyCtx.fill();
+
+  // Pixel moon (blocky)
+  skyCtx.fillStyle = '#ddeeff';
+  for (let py = -3; py <= 3; py++) {
+    for (let px = -3; px <= 3; px++) {
+      if (px*px + py*py <= 10) {
+        const brightness = 0.85 + 0.15 * Math.sin(px * 0.8 + py * 0.6);
+        skyCtx.fillStyle = `rgba(${Math.floor(220*brightness)},${Math.floor(240*brightness)},255,${brightness})`;
+        skyCtx.fillRect(moonX + px * 9 - 4, moonY + py * 9 - 4, 9, 9);
+      }
+    }
+  }
+  skyCtx.restore();
+
+  // Stars
+  stars.forEach(s => {
+    s.twinkle += s.speed;
+    const alpha = 0.4 + 0.6 * Math.abs(Math.sin(s.twinkle));
+    const size = s.size * (0.85 + 0.15 * Math.abs(Math.sin(s.twinkle)));
+    skyCtx.fillStyle = `rgba(200,230,255,${alpha})`;
+    // Pixel star (square)
+    skyCtx.fillRect(s.x * W, s.y * H, size, size);
+  });
+
+  // Clouds
+  clouds.forEach(c => {
+    c.x -= c.speed;
+    if (c.x < -0.3) c.x = 1.3;
+    const cx = c.x * W, cy = c.y * H;
+    skyCtx.save();
+    skyCtx.globalAlpha = c.alpha;
+    skyCtx.fillStyle = '#c5e8ff';
+    // Blocky pixel cloud
+    const bs = 12;
+    const blocks = [
+      [0,1],[1,1],[2,1],[3,1],[4,1],[5,1],
+      [1,0],[2,0],[3,0],[4,0],
+      [0,2],[1,2],[2,2],[3,2],[4,2],[5,2],
+    ];
+    blocks.forEach(([bx, by]) => {
+      skyCtx.fillRect(cx + bx * bs - c.w/2, cy + by * bs - c.h/2, bs, bs);
+    });
+    skyCtx.restore();
+  });
+
+  // Water reflection at the "bottom" of sky
+  const wY = H * 0.75;
+  for (let i = 0; i < 3; i++) {
+    const wAlpha = (0.15 - i * 0.04) * (0.8 + 0.2 * Math.sin(skyTick * 2 + i));
+    skyCtx.fillStyle = `rgba(77,217,247,${wAlpha})`;
+    skyCtx.fillRect(0, wY + i * 8, W, 4);
+  }
+
+  requestAnimationFrame(drawSky);
+}
+drawSky();
+
+// ==================== PARTICLE CANVAS ====================
+const pCanvas = document.getElementById('particles');
+const pCtx = pCanvas.getContext('2d');
+
+function resizeP() { pCanvas.width = window.innerWidth; pCanvas.height = window.innerHeight; }
+resizeP();
+window.addEventListener('resize', resizeP);
+
+const particles = [];
+const TYPES = ['heart', 'star', 'block'];
+
+function spawnParticle() {
+  const type = TYPES[Math.floor(Math.random() * TYPES.length)];
+  particles.push({
+    x: Math.random() * window.innerWidth,
+    y: window.innerHeight + 20,
+    size: 4 + Math.random() * 8,
+    vx: (Math.random() - 0.5) * 0.6,
+    vy: -(0.4 + Math.random() * 0.8),
+    alpha: 0.5 + Math.random() * 0.5,
+    type,
+    life: 0,
+    maxLife: 200 + Math.random() * 200,
+    hue: Math.random() * 60 - 30, // small hue shift
+  });
+}
+
+setInterval(spawnParticle, 300);
+
+function drawParticle(p) {
+  pCtx.save();
+  pCtx.globalAlpha = p.alpha * (1 - p.life / p.maxLife);
+  pCtx.translate(p.x, p.y);
+  const s = p.size;
+  if (p.type === 'heart') {
+    pCtx.fillStyle = '#ff8fb1';
+    // Pixel heart
+    const px = [
+      [1,0],[2,0],[4,0],[5,0],
+      [0,1],[1,1],[2,1],[3,1],[4,1],[5,1],[6,1],
+      [0,2],[1,2],[2,2],[3,2],[4,2],[5,2],[6,2],
+      [1,3],[2,3],[3,3],[4,3],[5,3],
+      [2,4],[3,4],[4,4],
+      [3,5],
+    ];
+    const bs = Math.max(1, s / 7);
+    px.forEach(([x,y]) => pCtx.fillRect(x*bs - s/2, y*bs - s/2, bs, bs));
+  } else if (p.type === 'star') {
+    pCtx.fillStyle = '#a8eaf7';
+    pCtx.fillRect(-s/2, -s/8, s, s/4);
+    pCtx.fillRect(-s/8, -s/2, s/4, s);
+  } else {
+    pCtx.fillStyle = 'rgba(77,217,247,0.6)';
+    pCtx.fillRect(-s/2, -s/2, s, s);
+    pCtx.strokeStyle = 'rgba(200,240,255,0.4)';
+    pCtx.lineWidth = 1;
+    pCtx.strokeRect(-s/2, -s/2, s, s);
+  }
+  pCtx.restore();
+}
+
+function animateParticles() {
+  pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    p.life++;
+    if (p.life > p.maxLife || p.y < -50) {
+      particles.splice(i, 1);
+      continue;
+    }
+    drawParticle(p);
+  }
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+// ==================== SCROLL REVEAL ====================
+const revealEls = document.querySelectorAll('.reveal, .timeline-item');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+    }
+  });
+}, { threshold: 0.1 });
+revealEls.forEach(el => observer.observe(el));
+
+// ==================== MUSIC ====================
+function toggleMusic() {
+  const audio = document.getElementById('bgMusic');
+  const btn = document.getElementById('musicBtn');
+  if (audio.paused) {
+    // Generate a simple tone using Web Audio API as fallback
+    if (!window.audioCtx) startGenerativeMusic();
+    btn.textContent = '♪ ON';
+    btn.style.color = 'var(--pixel-gold)';
+  } else {
+    if (window.audioCtx) {
+      window.audioCtx.suspend();
+    }
+    btn.textContent = '♪ OFF';
+    btn.style.color = 'var(--cyan)';
+  }
+}
+
+function startGenerativeMusic() {
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  window.audioCtx = ctx;
+
+  const notes = [261.63, 293.66, 329.63, 349.23, 392, 440, 493.88, 523.25];
+  const melody = [0, 2, 4, 7, 5, 4, 2, 0, 4, 7, 9, 7, 5, 4, 2, 4];
+  let step = 0;
+
+  function playNote(freq, time, dur) {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(freq, time);
+    gain.gain.setValueAtTime(0, time);
+    gain.gain.linearRampToValueAtTime(0.06, time + 0.05);
+    gain.gain.linearRampToValueAtTime(0, time + dur - 0.05);
+    osc.start(time);
+    osc.stop(time + dur);
+  }
+
+  const tempo = 0.5;
+
+  function scheduleMelody() {
+    const now = ctx.currentTime;
+    for (let i = 0; i < 8; i++) {
+      const noteIdx = melody[(step + i) % melody.length];
+      playNote(notes[noteIdx] / 2, now + i * tempo, tempo * 0.8);
+    }
+    step = (step + 8) % melody.length;
+  }
+
+  scheduleMelody();
+  setInterval(scheduleMelody, tempo * 8 * 1000);
+}
+
+// ==================== CURSOR TRAIL ====================
+document.addEventListener('mousemove', (e) => {
+  if (Math.random() > 0.7) return;
+  particles.push({
+    x: e.clientX,
+    y: e.clientY,
+    size: 3 + Math.random() * 4,
+    vx: (Math.random() - 0.5) * 1,
+    vy: -0.5 - Math.random() * 0.5,
+    alpha: 0.6,
+    type: Math.random() > 0.5 ? 'heart' : 'star',
+    life: 0,
+    maxLife: 60,
+  });
+});
+</script>
+</body>
+</html>
