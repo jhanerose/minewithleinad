@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jhane Rose & Leinad Clark 💙</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Crimson+Pro:ital,wght@0,300;0,400;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#04080f;--deep:#070d1c;--mid:#0c1a38;--blue:#112255;
+  --cyan:#2ec4e8;--soft:#7dd8f0;--pastel:#b4e4f8;--white:#e0f0ff;
+  --gold:#f2c840;--pink:#ffaac8;--green:#48d868;--red:#ff5566;
+  --glass:rgba(7,13,28,0.72);--gb:rgba(46,196,232,0.2);
+  --glow:rgba(46,196,232,0.4);--goldglow:rgba(242,200,64,0.4);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:"Crimson Pro",serif;background:var(--navy);color:var(--white);overflow-x:hidden;cursor:none;}
+
+/* Custom cursor */
+#cursor{position:fixed;pointer-events:none;z-index:9999;width:12px;height:12px;background:var(--cyan);image-rendering:pixelated;transform:translate(-50%,-50%);}
+#cursor-trail{position:fixed;pointer-events:none;z-index:9998;}
+
+/* Canvas layers */
+#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;}
+#fx-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;}
+#ui{position:relative;z-index:10;}
+
+/* ── CELEBRATION OVERLAY ── */
+#celebrate-overlay{
+  position:fixed;inset:0;z-index:500;pointer-events:none;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity 1.2s;
+}
+#celebrate-overlay.active{opacity:1;}
+.celebrate-title{
+  font-family:"Press Start 2P",monospace;
+  font-size:clamp(16px,3.5vw,36px);
+  text-align:center;line-height:1.6;
+  text-shadow:0 0 30px var(--cyan),0 0 60px rgba(46,196,232,.5);
+  color:var(--white);
+  animation:cel-pulse 2s ease-in-out infinite;
+}
+.celebrate-title.anniv{
+  color:var(--gold);
+  text-shadow:0 0 30px var(--gold),0 0 70px var(--goldglow);
+}
+@keyframes cel-pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.04);}}
+
+/* ── ANNIVERSARY PORTAL ── */
+#anniv-portal{
+  position:fixed;inset:0;z-index:600;
+  background:radial-gradient(ellipse at 50% 50%,rgba(242,200,64,.08) 0%,rgba(4,8,15,.96) 60%,rgba(4,8,15,1) 100%);
+  display:none;align-items:center;justify-content:center;
+  flex-direction:column;gap:28px;
+}
+#anniv-portal.open{display:flex;}
+.portal-ring{
+  width:220px;height:220px;border:4px solid var(--gold);
+  border-radius:50%;position:relative;
+  box-shadow:0 0 40px var(--goldglow),inset 0 0 40px rgba(242,200,64,.1);
+  animation:portal-spin 8s linear infinite;
+  display:flex;align-items:center;justify-content:center;
+}
+@keyframes portal-spin{to{transform:rotate(360deg);}}
+.portal-inner{
+  width:180px;height:180px;border:3px solid var(--cyan);
+  border-radius:50%;
+  animation:portal-spin 5s linear infinite reverse;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 28px var(--glow);
+}
+.portal-close{
+  font-family:"Press Start 2P",monospace;font-size:8px;
+  color:var(--gold);background:rgba(7,13,28,.85);
+  border:2px solid rgba(242,200,64,.4);padding:10px 18px;
+  cursor:pointer;transition:all .2s;pointer-events:all;
+}
+.portal-close:hover{background:rgba(242,200,64,.15);box-shadow:0 0 14px var(--goldglow);}
+
+/* ── LETTER POPUP ── */
+#letter-popup{
+  position:fixed;inset:0;z-index:700;
+  background:rgba(4,8,15,.92);backdrop-filter:blur(16px);
+  display:none;align-items:center;justify-content:center;padding:20px;
+}
+#letter-popup.open{display:flex;}
+.letter-box{
+  max-width:620px;width:100%;
+  background:linear-gradient(145deg,rgba(7,13,28,.98),rgba(11,21,52,.95));
+  border:3px solid rgba(242,200,64,.45);
+  padding:46px 42px;position:relative;
+  box-shadow:0 0 60px rgba(242,200,64,.1),0 0 120px rgba(46,196,232,.05);
+}
+.letter-box::before{
+  content:"✦ LOVE LETTER — ENCHANTED ✦";
+  position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  font-family:"Press Start 2P",monospace;font-size:7px;
+  color:var(--gold);background:var(--navy);padding:0 12px;
+  white-space:nowrap;text-shadow:0 0 8px var(--gold);
+}
+.letter-text{font-size:15px;line-height:2.15;color:var(--white);opacity:.93;font-style:italic;}
+.letter-text p{margin-bottom:18px;}
+.letter-sig{text-align:right;font-family:"Press Start 2P",monospace;font-size:7.5px;color:var(--gold);margin-top:20px;}
+.letter-close{
+  position:absolute;top:14px;right:14px;
+  font-family:"Press Start 2P",monospace;font-size:7px;
+  color:var(--cyan);background:transparent;border:none;cursor:pointer;
+  transition:color .2s;
+}
+.letter-close:hover{color:var(--white);}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:11px 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(4,8,15,.9);border-bottom:2px solid var(--gb);
+  backdrop-filter:blur(16px);
+}
+.logo{font-family:"Press Start 2P",monospace;font-size:9px;color:var(--cyan);text-shadow:0 0 10px var(--cyan);}
+.nav-links{list-style:none;display:flex;gap:18px;}
+.nav-links a{font-family:"Press Start 2P",monospace;font-size:6.5px;color:var(--soft);text-decoration:none;transition:all .2s;}
+.nav-links a:hover{color:var(--cyan);text-shadow:0 0 8px var(--cyan);}
+.nav-btns{display:flex;gap:10px;}
+.pxbtn{
+  font-family:"Press Start 2P",monospace;font-size:6.5px;
+  color:var(--cyan);background:rgba(46,196,232,.07);
+  border:2px solid var(--gb);padding:7px 12px;cursor:pointer;
+  transition:all .2s;white-space:nowrap;
+}
+.pxbtn:hover{background:rgba(46,196,232,.18);border-color:var(--cyan);box-shadow:0 0 12px var(--glow);}
+.pxbtn.gold{color:var(--gold);border-color:rgba(242,200,64,.35);}
+.pxbtn.gold:hover{background:rgba(242,200,64,.12);border-color:var(--gold);box-shadow:0 0 12px var(--goldglow);}
+
+/* ── HERO ── */
+#hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:110px 20px 80px;position:relative;
+}
+#hero::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 40%,transparent 25%,rgba(4,8,15,.75) 100%);
+  pointer-events:none;z-index:0;
+}
+.hero-content{position:relative;z-index:2;}
+.hero-eyebrow{
+  font-family:"Press Start 2P",monospace;font-size:8px;
+  color:var(--gold);text-shadow:0 0 12px var(--gold);
+  letter-spacing:3px;margin-bottom:16px;
+  animation:eyebrow-blink 2.5s infinite;
+}
+@keyframes eyebrow-blink{0%,100%{opacity:1;}50%{opacity:.5;}}
+.hero-names{
+  font-size:clamp(15px,3vw,24px);color:var(--soft);
+  letter-spacing:7px;margin-bottom:14px;font-weight:300;
+  font-style:italic;
+}
+.hero-title{
+  font-family:"Press Start 2P",monospace;
+  font-size:clamp(18px,5vw,52px);color:var(--white);
+  text-shadow:0 0 24px var(--cyan),0 0 60px rgba(46,196,232,.22);
+  line-height:1.4;margin-bottom:20px;
+  opacity:0;transform:translateY(40px);
+  animation:hero-in 1.3s cubic-bezier(.16,1,.3,1) .3s forwards;
+}
+.hero-title.anniv-mode{color:var(--gold);text-shadow:0 0 28px var(--gold),0 0 70px var(--goldglow);}
+@keyframes hero-in{to{opacity:1;transform:translateY(0);}}
+
+/* CHARACTERS */
+.chars{display:flex;align-items:flex-end;justify-content:center;gap:32px;margin:22px 0;position:relative;}
+.char-col{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.char-name{font-family:"Press Start 2P",monospace;font-size:6px;color:var(--soft);}
+.char-svg{image-rendering:pixelated;animation:char-idle 1.8s steps(2) infinite;}
+.char-svg.p2{animation-delay:.9s;}
+@keyframes char-idle{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+.red-string{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);}
+
+/* COUNTDOWN */
+.cd-wrap{display:flex;flex-direction:column;align-items:center;gap:12px;margin:26px 0 18px;}
+.cd-heading{font-family:"Press Start 2P",monospace;font-size:7.5px;color:var(--gold);letter-spacing:2px;text-shadow:0 0 8px rgba(242,200,64,.5);}
+.cd-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;max-width:680px;width:100%;}
+.cd-block{
+  background:var(--glass);border:2px solid var(--gb);
+  padding:18px 8px;text-align:center;backdrop-filter:blur(8px);
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.cd-block::after{
+  content:"";position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  transform:scaleX(0);transition:transform .4s;
+}
+.cd-block:hover::after{transform:scaleX(1);}
+.cd-block:hover{transform:translateY(-4px);box-shadow:0 8px 24px var(--glow);border-color:var(--cyan);}
+.cd-block.glow-strong{border-color:var(--cyan);box-shadow:0 0 20px var(--glow),0 0 40px rgba(46,196,232,.15);}
+.cd-num{font-family:"Press Start 2P",monospace;font-size:clamp(20px,4vw,40px);color:var(--cyan);display:block;margin-bottom:8px;text-shadow:0 0 12px var(--cyan);}
+.cd-lbl{font-family:"Press Start 2P",monospace;font-size:5.5px;color:var(--pastel);opacity:.7;}
+.next-pill{
+  font-family:"Press Start 2P",monospace;font-size:7px;
+  color:var(--white);background:var(--glass);border:2px solid var(--gb);
+  padding:9px 18px;backdrop-filter:blur(6px);display:inline-flex;align-items:center;gap:8px;
+}
+.next-dot{width:8px;height:8px;background:var(--gold);flex-shrink:0;animation:eyebrow-blink .9s infinite;}
+
+/* QUOTE */
+.hero-quote{font-size:clamp(14px,2.2vw,18px);color:var(--pastel);font-style:italic;max-width:520px;line-height:1.9;margin:10px 0 6px;}
+.hero-quote::before{content:"C ";color:var(--cyan);}
+.hero-quote::after{content:" D";color:var(--cyan);}
+.scroll-hint{font-family:"Press Start 2P",monospace;font-size:6.5px;color:var(--soft);opacity:.45;margin-top:30px;animation:bob 2.4s ease-in-out infinite;}
+@keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(8px);}}
+
+/* ── WATER DIVIDER ── */
+.water-div{width:100%;height:50px;position:relative;overflow:hidden;}
+.w-bar{position:absolute;left:0;right:0;height:5px;background:var(--cyan);opacity:.2;animation:water-wave 4s ease-in-out infinite;}
+.w-bar:nth-child(2){bottom:10px;opacity:.12;animation-delay:1.3s;}
+.w-bar:nth-child(3){bottom:19px;opacity:.06;animation-delay:2.5s;}
+@keyframes water-wave{0%,100%{transform:scaleX(1);}50%{transform:scaleX(.97) translateX(6px);}}
+
+/* ── SECTIONS ── */
+section{padding:90px 20px;position:relative;}
+.sec-t{font-family:"Press Start 2P",monospace;font-size:clamp(12px,2.5vw,19px);color:var(--cyan);text-shadow:0 0 12px var(--cyan);text-align:center;margin-bottom:10px;}
+.sec-div{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:50px;}
+.sec-line{height:2px;width:80px;background:linear-gradient(90deg,transparent,var(--cyan));}
+.sec-line.r{background:linear-gradient(90deg,var(--cyan),transparent);}
+.sec-icon{font-size:17px;}
+
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .7s,transform .7s;}
+.reveal.vis{opacity:1;transform:translateY(0);}
+
+/* ── WORLDS TABS ── */
+.world-tabs{display:flex;justify-content:center;gap:4px;margin-bottom:32px;}
+.wtab{
+  font-family:"Press Start 2P",monospace;font-size:8px;
+  padding:10px 20px;border:2px solid var(--gb);
+  background:var(--glass);color:var(--soft);cursor:pointer;transition:all .2s;
+}
+.wtab.active,.wtab:hover{background:rgba(46,196,232,.15);border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 14px var(--glow);}
+.world-panel{display:none;animation:fade-in .5s ease;}
+.world-panel.active{display:block;}
+@keyframes fade-in{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.world-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;max-width:1060px;margin:0 auto;}
+.wcard{
+  background:var(--glass);border:3px solid var(--gb);backdrop-filter:blur(10px);
+  padding:28px 24px;text-align:center;position:relative;overflow:hidden;
+  transition:all .3s;cursor:pointer;
+}
+.wcard::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,transparent,var(--cyan),transparent);
+  transform:scaleX(0);transition:transform .4s;
+}
+.wcard:hover::before{transform:scaleX(1);}
+.wcard:hover{transform:translateY(-6px);box-shadow:0 14px 40px rgba(46,196,232,.18);border-color:var(--cyan);}
+.wcard-icon{font-size:38px;margin-bottom:14px;display:block;animation:float-icon 4s ease-in-out infinite;filter:drop-shadow(0 0 7px rgba(46,196,232,.45));}
+@keyframes float-icon{0%,100%{transform:translateY(0);}50%{transform:translateY(-7px);}}
+.wcard-t{font-family:"Press Start 2P",monospace;font-size:8px;color:var(--cyan);margin-bottom:10px;}
+.wcard-b{font-size:13px;color:var(--soft);line-height:1.85;opacity:.9;}
+
+/* ── TIMELINE ── */
+.tl-wrap{max-width:840px;margin:0 auto;position:relative;}
+.tl-spine{position:absolute;left:19px;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--cyan),rgba(46,196,232,.08));}
+.tl-item{position:relative;padding-left:62px;margin-bottom:48px;opacity:0;transform:translateX(-24px);transition:opacity .7s,transform .7s;}
+.tl-item.vis{opacity:1;transform:translateX(0);}
+.tl-node{
+  position:absolute;left:7px;top:9px;
+  width:26px;height:26px;
+  background:var(--navy);border:3px solid var(--cyan);
+  display:flex;align-items:center;justify-content:center;font-size:12px;
+  box-shadow:0 0 10px var(--glow);transition:all .3s;
+}
+.tl-item:hover .tl-node{transform:scale(1.22);box-shadow:0 0 22px var(--cyan);}
+.tl-card{
+  background:var(--glass);border:2px solid var(--gb);
+  padding:24px 26px;backdrop-filter:blur(10px);
+  transition:all .3s;cursor:default;
+}
+.tl-item:hover .tl-card{border-color:var(--cyan);box-shadow:0 0 28px rgba(46,196,232,.1);}
+.tl-era{font-family:"Press Start 2P",monospace;font-size:7px;color:var(--gold);margin-bottom:6px;text-shadow:0 0 6px rgba(242,200,64,.4);}
+.tl-head{font-size:clamp(16px,2.5vw,21px);color:var(--white);margin-bottom:10px;font-weight:400;}
+.tl-body{font-size:14px;color:var(--soft);line-height:1.9;opacity:.88;}
+.tl-body em{color:var(--pink);}
+.tl-body strong{color:var(--pastel);font-weight:400;}
+
+/* ── INVENTORY ── */
+.inv-outer{
+  background:rgba(4,8,15,.75);border:4px solid rgba(46,196,232,.22);
+  padding:22px;max-width:860px;margin:0 auto;
+}
+.inv-bar{font-family:"Press Start 2P",monospace;font-size:7px;color:var(--pastel);opacity:.55;text-align:center;letter-spacing:2px;margin-bottom:14px;}
+.inv-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;}
+.islot{
+  background:rgba(7,13,28,.85);border:3px solid rgba(46,196,232,.18);
+  aspect-ratio:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:6px;
+  cursor:pointer;transition:all .25s;position:relative;overflow:visible;
+}
+.islot:hover{border-color:var(--cyan);background:rgba(46,196,232,.1);box-shadow:0 0 16px rgba(46,196,232,.28);transform:scale(1.06);}
+.islot:hover .tt{opacity:1;transform:translateX(-50%) translateY(-4px);}
+.islot::after{content:attr(data-n);position:absolute;bottom:5px;right:7px;font-family:"Press Start 2P",monospace;font-size:7px;color:var(--white);text-shadow:1px 1px 0 #000;}
+.si{font-size:26px;filter:drop-shadow(0 0 5px rgba(46,196,232,.4));}
+.sn{font-family:"Press Start 2P",monospace;font-size:5.5px;color:var(--soft);text-align:center;line-height:1.4;padding:0 4px;}
+.tt{
+  position:absolute;bottom:calc(100% + 8px);left:50%;
+  transform:translateX(-50%) translateY(6px);
+  background:rgba(4,8,15,.97);border:2px solid var(--cyan);
+  padding:8px 12px;font-size:12px;color:var(--pastel);
+  width:190px;text-align:center;line-height:1.6;
+  opacity:0;transition:all .25s;pointer-events:none;z-index:20;
+  font-family:"Crimson Pro",serif;
+}
+.tt::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--cyan);}
+
+/* ── DREAMS ── */
+.dreams-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px;max-width:920px;margin:0 auto;}
+.ditem{
+  background:var(--glass);border:2px solid var(--gb);
+  padding:24px 18px;text-align:center;backdrop-filter:blur(8px);
+  transition:all .3s;cursor:pointer;position:relative;
+}
+.ditem:hover{border-color:var(--gold);box-shadow:0 0 22px rgba(242,200,64,.18);transform:scale(1.04);}
+.ditem.done::after{content:"✓";position:absolute;top:8px;right:10px;font-family:"Press Start 2P",monospace;font-size:9px;color:var(--green);text-shadow:0 0 6px var(--green);}
+.d-icon{font-size:28px;margin-bottom:11px;display:block;}
+.d-t{font-family:"Press Start 2P",monospace;font-size:7px;color:var(--pastel);line-height:1.6;}
+
+/* ── BOOK ── */
+.book{
+  background:linear-gradient(145deg,rgba(5,10,22,.98),rgba(10,20,50,.93));
+  border:4px solid var(--blue);padding:52px 48px;
+  position:relative;max-width:720px;margin:0 auto;
+  box-shadow:0 0 60px rgba(46,196,232,.08),inset 0 0 40px rgba(46,196,232,.04);
+  backdrop-filter:blur(18px);
+}
+.book-badge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);font-family:"Press Start 2P",monospace;font-size:7px;color:var(--gold);background:var(--navy);padding:0 13px;text-shadow:0 0 8px var(--gold);white-space:nowrap;}
+.book-spine{position:absolute;left:21px;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--cyan),var(--blue));opacity:.4;}
+.glyphs{text-align:center;font-size:17px;letter-spacing:9px;color:var(--cyan);opacity:.28;margin:16px 0;animation:glyph-shine 5s ease-in-out infinite;}
+@keyframes glyph-shine{0%,100%{opacity:.28;}50%{opacity:.65;text-shadow:0 0 8px var(--cyan);}}
+.book-body{font-size:15px;line-height:2.1;color:var(--white);opacity:.93;}
+.book-body p{margin-bottom:20px;}
+.book-body p:first-child::first-letter{font-size:28px;float:left;margin-right:8px;margin-top:4px;color:var(--cyan);text-shadow:0 0 12px var(--cyan);font-family:"Press Start 2P",monospace;line-height:1;}
+.book-sig{text-align:right;font-family:"Press Start 2P",monospace;font-size:7.5px;color:var(--gold);text-shadow:0 0 8px var(--gold);margin-top:22px;}
+
+/* ── ENDING ── */
+#ending{min-height:85vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 20px;}
+#ending::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,rgba(46,196,232,.06) 0%,transparent 68%);pointer-events:none;}
+.end-quote{font-size:clamp(14px,2.4vw,19px);color:var(--pastel);font-style:italic;max-width:580px;line-height:2.1;margin-bottom:22px;}
+.end-final{font-family:"Press Start 2P",monospace;font-size:clamp(8px,1.8vw,13px);color:var(--cyan);text-shadow:0 0 12px var(--cyan);}
+.end-heart{font-size:32px;animation:heartbeat 1.4s ease-in-out infinite;filter:drop-shadow(0 0 10px var(--pink));}
+@keyframes heartbeat{0%,100%{transform:scale(1);}50%{transform:scale(1.2);}}
+
+footer{text-align:center;padding:40px 20px 64px;border-top:2px solid var(--gb);font-family:"Press Start 2P",monospace;font-size:6.5px;color:var(--soft);opacity:.4;line-height:2.8;}
+
+@media(max-width:640px){
+  .cd-grid{grid-template-columns:repeat(3,1fr);}
+  .nav-links{display:none;}
+  .book{padding:34px 20px;}
+  .world-tabs{flex-wrap:wrap;}
+}
+</style>
+</head>
+<body>
+<div id="cursor"></div>
+<canvas id="bg-canvas"></canvas>
+<canvas id="fx-canvas"></canvas>
+
+<!-- CELEBRATION OVERLAY -->
+<div id="celebrate-overlay">
+  <div id="cel-text" class="celebrate-title"></div>
+</div>
+
+<!-- ANNIVERSARY PORTAL -->
+<div id="anniv-portal">
+  <div class="portal-ring">
+    <div class="portal-inner">
+      <span style="font-size:40px;">💙</span>
+    </div>
+  </div>
+  <div style="text-align:center;">
+    <div style="font-family:'Press Start 2P',monospace;font-size:9px;color:var(--gold);text-shadow:0 0 12px var(--gold);margin-bottom:12px;" id="portal-title">ANNIVERSARY PORTAL</div>
+    <div style="font-size:14px;color:var(--pastel);margin-bottom:20px;" id="portal-sub">June 27 — A Day Only For You</div>
+    <button class="portal-close" onclick="document.getElementById('anniv-portal').classList.remove('open');document.getElementById('letter-popup').classList.add('open');">OPEN LOVE LETTER ✉</button>
+    <br><br>
+    <button class="portal-close" onclick="document.getElementById('anniv-portal').classList.remove('open');" style="margin-top:8px;">CLOSE PORTAL ✕</button>
+  </div>
+</div>
+
+<!-- LOVE LETTER POPUP -->
+<div id="letter-popup">
+  <div class="letter-box">
+    <button class="letter-close" onclick="document.getElementById('letter-popup').classList.remove('open');">✕ CLOSE</button>
+    <div style="font-family:'Press Start 2P',monospace;font-size:7.5px;color:var(--gold);margin-bottom:20px;text-shadow:0 0 8px var(--gold);">TO: JHANE ROSE</div>
+    <div class="letter-text">
+      <p>I still think about the car eraser. How something that small could hold so much — a third-grade afternoon, a shy boy watching sunlight catch your face, the start of something that would take fourteen years to name.</p>
+      <p>We were always circling, weren't we? Different schools, different timelines. Eleven years of Facebook notifications that felt like quiet promises. Late nights on Discord. Mobile Legends matches that were never really about the game.</p>
+      <p>Then Minecraft. A Realms server you both kept logging into — just the two of you, building in comfortable silence, not yet saying what you both already knew.</p>
+      <p>June 27, 2024. The day the red string finally ran out of slack.</p>
+      <p>Happy Anniversary, Jhane Rose. Thank you for still being on the same server.</p>
+    </div>
+    <div class="letter-sig">— with 💙, always &nbsp; L.C.</div>
+  </div>
+</div>
+
+<div id="ui">
+<!-- NAV -->
+<nav>
+  <div class="logo">💙 J × L</div>
+  <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#story">Story</a></li>
+    <li><a href="#worlds">Worlds</a></li>
+    <li><a href="#memories">Items</a></li>
+    <li><a href="#letter-sec">Letter</a></li>
+    <li><a href="#ending">Finale</a></li>
+  </ul>
+  <div class="nav-btns">
+    <button class="pxbtn" id="musicBtn" onclick="toggleMusic()">♪ OFF</button>
+    <button class="pxbtn" onclick="toggleDayNight()">☀ / 🌙</button>
+    <button class="pxbtn gold" id="portalBtn" onclick="openPortal()" style="display:none;">✨ PORTAL</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+<div class="hero-content">
+  <div class="hero-eyebrow" id="eyebrow">✦ 23RD MONTHSARY ✦</div>
+  <div class="hero-names">Jhane Rose &amp; Leinad Clark</div>
+  <h1 class="hero-title" id="heroTitle">23 Months Together</h1>
+
+  <div class="chars">
+    <!-- JHANE pixel character -->
+    <div class="char-col">
+      <div class="char-name">JHANE</div>
+      <svg class="char-svg" width="56" height="72" viewBox="0 0 14 18" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="0" width="10" height="2" fill="#3a1505"/>
+        <rect x="1" y="2" width="1" height="5" fill="#3a1505"/>
+        <rect x="12" y="2" width="1" height="5" fill="#3a1505"/>
+        <rect x="2" y="2" width="10" height="5" fill="#e8aa80"/>
+        <rect x="4" y="3" width="2" height="2" fill="#1a0800"/>
+        <rect x="8" y="3" width="2" height="2" fill="#1a0800"/>
+        <rect x="4" y="3" width="1" height="1" fill="#fff"/>
+        <rect x="8" y="3" width="1" height="1" fill="#fff"/>
+        <rect x="5" y="6" width="4" height="1" fill="#c06040"/>
+        <rect x="2" y="7" width="10" height="6" fill="#ff88bb"/>
+        <rect x="2" y="8" width="10" height="1" fill="#ff66a0"/>
+        <rect x="0" y="7" width="2" height="5" fill="#ff88bb"/>
+        <rect x="12" y="7" width="2" height="5" fill="#ff88bb"/>
+        <rect x="3" y="13" width="3" height="4" fill="#3366cc"/>
+        <rect x="8" y="13" width="3" height="4" fill="#3366cc"/>
+        <rect x="3" y="16" width="4" height="2" fill="#111"/>
+        <rect x="7" y="16" width="4" height="2" fill="#111"/>
+      </svg>
+    </div>
+    <!-- Red string SVG -->
+    <div class="red-string">
+      <svg width="120" height="32" viewBox="0 0 120 32" overflow="visible">
+        <path d="M4,16 C20,4 40,28 60,16 C80,4 100,28 116,16" stroke="#ff5566" stroke-width="1.5" fill="none" opacity="0.75">
+          <animate attributeName="d" values="M4,16 C20,4 40,28 60,16 C80,4 100,28 116,16;M4,16 C20,28 40,4 60,16 C80,28 100,4 116,16;M4,16 C20,4 40,28 60,16 C80,4 100,28 116,16" dur="3s" repeatCount="indefinite"/>
+        </path>
+        <circle cx="4" cy="16" r="3" fill="#ff5566" opacity="0.8"/>
+        <circle cx="116" cy="16" r="3" fill="#ff5566" opacity="0.8"/>
+        <text x="60" y="30" text-anchor="middle" font-family="Press Start 2P" font-size="5" fill="#ff8888" opacity="0.55">red string</text>
+      </svg>
+    </div>
+    <!-- LEINAD pixel character -->
+    <div class="char-col">
+      <div class="char-name">LEINAD</div>
+      <svg class="char-svg p2" width="56" height="72" viewBox="0 0 14 18" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="0" width="10" height="3" fill="#1a0800"/>
+        <rect x="2" y="3" width="10" height="5" fill="#c88a60"/>
+        <rect x="4" y="4" width="2" height="2" fill="#1a0800"/>
+        <rect x="8" y="4" width="2" height="2" fill="#1a0800"/>
+        <rect x="4" y="4" width="1" height="1" fill="#fff"/>
+        <rect x="8" y="4" width="1" height="1" fill="#fff"/>
+        <rect x="5" y="7" width="4" height="1" fill="#905030"/>
+        <rect x="2" y="8" width="10" height="6" fill="#2ec4e8"/>
+        <rect x="3" y="8" width="8" height="1" fill="#20a8cc"/>
+        <rect x="0" y="8" width="2" height="5" fill="#2ec4e8"/>
+        <rect x="12" y="8" width="2" height="5" fill="#2ec4e8"/>
+        <rect x="3" y="14" width="3" height="4" fill="#1a2a4a"/>
+        <rect x="8" y="14" width="3" height="4" fill="#1a2a4a"/>
+        <rect x="3" y="17" width="4" height="1" fill="#080810"/>
+        <rect x="7" y="17" width="4" height="1" fill="#080810"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="cd-wrap">
+    <div class="cd-heading" id="cdHead">COUNTING DOWN TO 24TH MONTHSARY</div>
+    <div class="cd-grid">
+      <div class="cd-block" id="cdb-mo"><span class="cd-num" id="cd-mo">00</span><span class="cd-lbl">MONTHS</span></div>
+      <div class="cd-block"><span class="cd-num" id="cd-d">00</span><span class="cd-lbl">DAYS</span></div>
+      <div class="cd-block"><span class="cd-num" id="cd-h">00</span><span class="cd-lbl">HOURS</span></div>
+      <div class="cd-block"><span class="cd-num" id="cd-m">00</span><span class="cd-lbl">MINS</span></div>
+      <div class="cd-block"><span class="cd-num" id="cd-s">00</span><span class="cd-lbl">SECS</span></div>
+    </div>
+    <div class="next-pill"><div class="next-dot"></div>NEXT: <span id="nextLbl">—</span></div>
+  </div>
+
+  <p class="hero-quote">Some worlds were always meant to reconnect.</p>
+  <div class="scroll-hint">▼ EXPLORE THE STORY ▼</div>
+</div>
+</section>
+
+<div class="water-div"><div class="w-bar" style="bottom:0"></div><div class="w-bar"></div><div class="w-bar"></div></div>
+
+<!-- STORY TIMELINE -->
+<section id="story" style="background:linear-gradient(180deg,transparent,rgba(11,21,52,.35),transparent);">
+<div class="sec-t reveal">THE STORY</div>
+<div class="sec-div reveal"><div class="sec-line"></div><span class="sec-icon">📖</span><div class="sec-line r"></div></div>
+<div class="tl-wrap reveal">
+  <div class="tl-spine"></div>
+
+  <div class="tl-item">
+    <div class="tl-node">🏫</div>
+    <div class="tl-card">
+      <div class="tl-era">CHAPTER I — GRADE 3</div>
+      <div class="tl-head">The Car Eraser</div>
+      <div class="tl-body">
+        Classmates. Seatmates. A bright chatty girl and a boy too shy to say what he noticed when the sunlight caught her face mid-laugh.<br><br>
+        He lent her his <strong>car eraser</strong>. She still remembers it. So does he. <em>Some small things hold a whole future inside them.</em><br><br>
+        The year ended. Leinad transferred schools. The story paused — but some stories don't have endings, only intermissions.
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-item">
+    <div class="tl-node">💻</div>
+    <div class="tl-card">
+      <div class="tl-era">CHAPTER II — 11 YEARS ONLINE</div>
+      <div class="tl-head">Facebook Mutuals & Discord Nights</div>
+      <div class="tl-body">
+        Eleven years of <em>almost</em>. Mutuals on Facebook, occasional catch-ups, the quiet hum of never fully letting go.<br><br>
+        Then games — <strong>Mobile Legends sessions</strong> that were never really about the game. Late-night Discord calls stretching past midnight. Pandemic quiet making space for honest conversation.<br><br>
+        Two people still orbiting each other without naming it.
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-item">
+    <div class="tl-node">📚</div>
+    <div class="tl-card">
+      <div class="tl-era">CHAPTER III — THE DRIFT</div>
+      <div class="tl-head">Busy Schedules, Persistent Invitations</div>
+      <div class="tl-body">
+        <em>Jhane poured herself into her studies.</em> Life got loud. Senior high drifted them apart again.<br><br>
+        But Leinad kept asking. <strong>"Laro tayo?"</strong> became its own kind of language — patient, warm, never quite giving up. <em>Neither of them fully moved on.</em> Some threads don't break; they just wait.
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-item">
+    <div class="tl-node">⛏️</div>
+    <div class="tl-card">
+      <div class="tl-era">CHAPTER IV — THE MINECRAFT ARC</div>
+      <div class="tl-head">A Server Built for Two</div>
+      <div class="tl-body">
+        Jhane got curious about <strong>Minecraft</strong>. Mentioned it, casually, the way you mention things to someone you trust.<br><br>
+        Leinad bought a <em>Minecraft Realms server</em>. Made them both admins. They played. They built. They talked while placing blocks in silence that felt more like comfort than quiet.<br><br>
+        Slowly they realized: <strong>they were the only ones logging on.</strong> A whole world — just for two.
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-item">
+    <div class="tl-node">💙</div>
+    <div class="tl-card">
+      <div class="tl-era">CHAPTER V — JUNE 27, 2024</div>
+      <div class="tl-head">Same World. Finally.</div>
+      <div class="tl-body">
+        They met in person. After all those years — the eraser, the Facebook notifications, the Discord calls, the Minecraft evenings — they stood in the same place at the same time.<br><br>
+        <em>Comfortable. Inevitable. Right.</em><br><br>
+        First love after years of unfinished timing. <strong>The red string had never actually broken — it had only been waiting.</strong><br><br>
+        June 27, 2024. The world saved.
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="water-div"><div class="w-bar" style="bottom:0"></div><div class="w-bar"></div></div>
+
+<!-- WORLDS -->
+<section id="worlds">
+<div class="sec-t reveal">SHARED WORLDS</div>
+<div class="sec-div reveal"><div class="sec-line"></div><span class="sec-icon">🌍</span><div class="sec-line r"></div></div>
+<div class="reveal">
+<div class="world-tabs">
+  <div class="wtab active" onclick="switchTab('shared')">🌍 SHARED WORLD</div>
+  <div class="wtab" onclick="switchTab('jhane')">🌸 JHANE'S SPACE</div>
+  <div class="wtab" onclick="switchTab('leinad')">⚡ LEINAD'S SPACE</div>
+</div>
+
+<div id="tab-shared" class="world-panel active">
+  <div class="world-grid">
+    <div class="wcard"><span class="wcard-icon">⛏️</span><div class="wcard-t">REALMS SERVER</div><div class="wcard-b">A Minecraft Realms world bought for two. Both admins. Always the only ones online. A private universe built block by block.</div></div>
+    <div class="wcard"><span class="wcard-icon">🌙</span><div class="wcard-t">NIGHT SESSIONS</div><div class="wcard-b">Long evenings where the in-game sky went dark and neither of you noticed time slipping away. Just building and talking.</div></div>
+    <div class="wcard"><span class="wcard-icon">🧵</span><div class="wcard-t">RED STRING</div><div class="wcard-b">Grade 3 → 11 years → Minecraft → June 2024. The invisible thread that kept pulling them back, no matter the distance.</div></div>
+    <div class="wcard"><span class="wcard-icon">🎮</span><div class="wcard-t">CO-OP ALWAYS</div><div class="wcard-b">Mobile Legends. Discord. Minecraft. Every game was just an excuse to be in the same space again.</div></div>
+    <div class="wcard"><span class="wcard-icon">💬</span><div class="wcard-t">INSIDE LANGUAGE</div><div class="wcard-b">References only they understand. The kind of shorthand that takes years to build and means everything once it exists.</div></div>
+    <div class="wcard"><span class="wcard-icon">💎</span><div class="wcard-t">DIAMOND TIER</div><div class="wcard-b">Finding someone who waits across years, bad timing, and life's drift — rarer than any in-game resource.</div></div>
+  </div>
+</div>
+
+<div id="tab-jhane" class="world-panel">
+  <div class="world-grid">
+    <div class="wcard"><span class="wcard-icon">🌸</span><div class="wcard-t">CHEERFUL ENERGY</div><div class="wcard-b">The girl who lit up a third-grade classroom just by being herself. Talkative, bright, the kind of presence that stays.</div></div>
+    <div class="wcard"><span class="wcard-icon">📚</span><div class="wcard-t">DEDICATED STUDENT</div><div class="wcard-b">Years of focused studying. Building a future with discipline and intention. Never letting the drift stop her growth.</div></div>
+    <div class="wcard"><span class="wcard-icon">🎯</span><div class="wcard-t">MINECRAFT CURIOUS</div><div class="wcard-b">One casual mention of wanting to try Minecraft set an entire love story in motion. Curiosity as destiny.</div></div>
+    <div class="wcard"><span class="wcard-icon">🌙</span><div class="wcard-t">LATE NIGHT HEART</div><div class="wcard-b">The person who stays on a Discord call past midnight. Who logs onto the server just to build in comfortable silence.</div></div>
+  </div>
+</div>
+
+<div id="tab-leinad" class="world-panel">
+  <div class="world-grid">
+    <div class="wcard"><span class="wcard-icon">🤫</span><div class="wcard-t">THE QUIET ONE</div><div class="wcard-b">Shy in Grade 3. Watching from the edges. Noticing things — like how sunlight looked when it caught her face mid-laugh.</div></div>
+    <div class="wcard"><span class="wcard-icon">🚗</span><div class="wcard-t">THE CAR ERASER</div><div class="wcard-b">He lent it. She kept it in memory. Some gestures are small and some are everything. This was both.</div></div>
+    <div class="wcard"><span class="wcard-icon">🎮</span><div class="wcard-t">PERSISTENT INVITES</div><div class="wcard-b">"Laro tayo?" — patient, consistent, never giving up. A man who kept asking even when schedules didn't align.</div></div>
+    <div class="wcard"><span class="wcard-icon">🏰</span><div class="wcard-t">SERVER BUILDER</div><div class="wcard-b">Bought the Minecraft Realms. Built the world. Made her admin. Sometimes love is a Realms subscription.</div></div>
+  </div>
+</div>
+</div>
+</section>
+
+<!-- INVENTORY MEMORIES -->
+<section id="memories" style="background:linear-gradient(180deg,transparent,rgba(11,21,52,.35),transparent);">
+<div class="sec-t reveal">MEMORY INVENTORY</div>
+<div class="sec-div reveal"><div class="sec-line"></div><span class="sec-icon">🎒</span><div class="sec-line r"></div></div>
+<div class="inv-outer reveal">
+  <div class="inv-bar">JHANE × LEINAD — COLLECTED ITEMS [ HOVER TO INSPECT ]</div>
+  <div class="inv-grid">
+    <div class="islot" data-n="1"><span class="si">🚗</span><span class="sn">CAR ERASER</span><div class="tt">A Grade 3 eraser lent quietly. Jhane still remembers it. Some small things hold a whole future.</div></div>
+    <div class="islot" data-n="11"><span class="si">📘</span><span class="sn">FB YEARS</span><div class="tt">11 years as Facebook mutuals. Never fully gone. One notification away from restarting everything.</div></div>
+    <div class="islot" data-n="∞"><span class="si">🎮</span><span class="sn">ML MATCHES</span><div class="tt">Mobile Legends sessions that were never about the game. Just a reason to be in the same space.</div></div>
+    <div class="islot" data-n="💙"><span class="si">🎤</span><span class="sn">DISCORD CALLS</span><div class="tt">Late-night calls stretching into morning. Neither person wanting to say goodbye first.</div></div>
+    <div class="islot" data-n="1"><span class="si">🏰</span><span class="sn">REALMS SERVER</span><div class="tt">Leinad bought it. Both admins. Only two players. A whole world built for an audience of each other.</div></div>
+    <div class="islot" data-n="★"><span class="si">🌅</span><span class="sn">FIRST MEETING</span><div class="tt">June 27, 2024. In person at last. After years of screens — the same comfort, finally real.</div></div>
+    <div class="islot" data-n="23+"><span class="si">💙</span><span class="sn">MONTHS TOGETHER</span><div class="tt">Every month earned. Every month chosen. Still counting.</div></div>
+    <div class="islot" data-n="∞"><span class="si">🧵</span><span class="sn">RED STRING</span><div class="tt">The invisible thread. Grade 3 → 11 years → Minecraft → June 2024. It was always there.</div></div>
+  </div>
+</div>
+</section>
+
+<!-- DREAMS -->
+<section id="dreams-sec">
+<div class="sec-t reveal">FUTURE QUESTS</div>
+<div class="sec-div reveal"><div class="sec-line"></div><span class="sec-icon">⭐</span><div class="sec-line r"></div></div>
+<div class="dreams-grid reveal">
+  <div class="ditem done"><span class="d-icon">🎮</span><div class="d-t">PLAY MINECRAFT TOGETHER</div></div>
+  <div class="ditem done"><span class="d-icon">📅</span><div class="d-t">1 YEAR TOGETHER</div></div>
+  <div class="ditem"><span class="d-icon">✈️</span><div class="d-t">TRAVEL SOMEWHERE NEW</div></div>
+  <div class="ditem"><span class="d-icon">🎂</span><div class="d-t">2ND ANNIVERSARY JUNE 27 2026</div></div>
+  <div class="ditem"><span class="d-icon">🌌</span><div class="d-t">STARGAZE TOGETHER</div></div>
+  <div class="ditem"><span class="d-icon">🎵</span><div class="d-t">FIND YOUR SONG</div></div>
+  <div class="ditem"><span class="d-icon">🏠</span><div class="d-t">BUILD A HOME TOGETHER</div></div>
+  <div class="ditem"><span class="d-icon">♾️</span><div class="d-t">KEEP CHOOSING EACH OTHER</div></div>
+</div>
+</section>
+
+<!-- ENCHANTED BOOK -->
+<section id="letter-sec" style="background:linear-gradient(180deg,transparent,rgba(11,21,52,.35),transparent);">
+<div class="sec-t reveal">ENCHANTED LETTER</div>
+<div class="sec-div reveal"><div class="sec-line"></div><span class="sec-icon">📜</span><div class="sec-line r"></div></div>
+<div class="book reveal">
+  <div class="book-badge">✦ ENCHANTED BOOK — JHANE ROSE & LEINAD CLARK ✦</div>
+  <div class="book-spine"></div>
+  <div class="glyphs">ᚠ ᚢ ᚦ ✦ ᚨ ᚱ ᚲ ✦ ᚷ ᚹ ᚺ</div>
+  <div class="book-body">
+    <p>I don't think there's a word for what you two are. "Childhood sweethearts" is too simple. "Reconnected lovers" misses the texture of eleven years of almost. What you are is rarer — two people the universe kept placing back into orbit of each other.</p>
+    <p>He lent you a car eraser in Grade 3. You still remember it. That's not nothing. That's the whole story compressed into one small object.</p>
+    <p>Eleven years of Facebook notifications that were quiet promises. Late-night Discord calls that became mornings. A Minecraft Realms server where you were always the only two logged on — building a world before you knew you were building a life.</p>
+    <p>June 27, 2024 was not where the story began. It was where it finally caught up to itself. Where the red string pulled taut. Where two people who had been circling finally stopped and said — <em>oh. It's you. It was always you.</em></p>
+    <p>23 months, Jhane and Leinad. Block by block. Every loading screen and disconnection and drift — it brought you here. And here is beautiful.</p>
+  </div>
+  <div class="glyphs">ᛏ ᛒ ᛖ ✦ ᛗ ᛚ ᛜ ✦ ᛞ ᛟ ᛠ</div>
+  <div class="book-sig">— with 💙, the universe</div>
+</div>
+</section>
+
+<!-- ENDING -->
+<section id="ending">
+<div class="sec-t reveal" style="font-size:clamp(11px,2.2vw,17px);">SAME SPAWN POINT</div>
+<div class="sec-div reveal"><div class="sec-line"></div><span class="sec-icon">🌙</span><div class="sec-line r"></div></div>
+
+<!-- Ending landscape -->
+<div class="reveal" style="width:100%;max-width:780px;margin:0 auto;">
+<svg width="780" height="230" viewBox="0 0 780 230" style="image-rendering:pixelated;width:100%;max-width:780px;" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#040810"/><stop offset="100%" stop-color="#0c1a38"/></linearGradient>
+    <filter id="gf"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="780" height="230" fill="url(#skyG)"/>
+  <!-- Stars -->
+  <rect x="40" y="14" width="2" height="2" fill="#fff" opacity=".9"><animate attributeName="opacity" values=".9;.2;.9" dur="2.1s" repeatCount="indefinite"/></rect>
+  <rect x="110" y="22" width="2" height="2" fill="#fff" opacity=".7"><animate attributeName="opacity" values=".7;.1;.7" dur="1.8s" repeatCount="indefinite"/></rect>
+  <rect x="180" y="11" width="2" height="2" fill="#fff" opacity=".85"><animate attributeName="opacity" values=".85;.25;.85" dur="2.6s" repeatCount="indefinite"/></rect>
+  <rect x="260" y="19" width="2" height="2" fill="#fff" opacity=".65"><animate attributeName="opacity" values=".65;.1;.65" dur="1.5s" repeatCount="indefinite"/></rect>
+  <rect x="460" y="13" width="2" height="2" fill="#fff" opacity=".9"><animate attributeName="opacity" values=".9;.2;.9" dur="2.3s" repeatCount="indefinite"/></rect>
+  <rect x="540" y="21" width="2" height="2" fill="#fff" opacity=".75"><animate attributeName="opacity" values=".75;.15;.75" dur="2s" repeatCount="indefinite"/></rect>
+  <rect x="620" y="10" width="2" height="2" fill="#fff" opacity=".8"><animate attributeName="opacity" values=".8;.2;.8" dur="2.8s" repeatCount="indefinite"/></rect>
+  <rect x="700" y="18" width="2" height="2" fill="#fff" opacity=".65"><animate attributeName="opacity" values=".65;.1;.65" dur="1.6s" repeatCount="indefinite"/></rect>
+  <rect x="74" y="38" width="2" height="2" fill="#aaddff" opacity=".5"><animate attributeName="opacity" values=".5;.08;.5" dur="3.2s" repeatCount="indefinite"/></rect>
+  <rect x="330" y="32" width="2" height="2" fill="#aaddff" opacity=".6"><animate attributeName="opacity" values=".6;.1;.6" dur="2.8s" repeatCount="indefinite"/></rect>
+  <rect x="500" y="40" width="2" height="2" fill="#aaddff" opacity=".5"><animate attributeName="opacity" values=".5;.1;.5" dur="2.5s" repeatCount="indefinite"/></rect>
+  <!-- Moon -->
+  <circle cx="640" cy="46" r="52" fill="#112255" opacity=".35"/>
+  <rect x="622" y="28" width="10" height="10" fill="#ddeeff"/><rect x="632" y="18" width="10" height="10" fill="#ddeeff"/>
+  <rect x="642" y="28" width="10" height="10" fill="#ddeeff"/><rect x="632" y="38" width="10" height="10" fill="#ddeeff"/>
+  <rect x="622" y="38" width="10" height="10" fill="#ddeeff" opacity=".7"/>
+  <!-- Mountains -->
+  <rect x="0" y="105" width="90" height="125" fill="#070d1c"/><rect x="18" y="88" width="60" height="20" fill="#070d1c"/><rect x="36" y="72" width="32" height="18" fill="#070d1c"/>
+  <rect x="90" y="110" width="110" height="120" fill="#0c1a38"/><rect x="110" y="92" width="75" height="20" fill="#0c1a38"/><rect x="130" y="75" width="42" height="19" fill="#0c1a38"/>
+  <rect x="200" y="108" width="130" height="122" fill="#070d1c"/><rect x="218" y="88" width="88" height="22" fill="#070d1c"/><rect x="236" y="70" width="52" height="20" fill="#070d1c"/>
+  <rect x="580" y="108" width="100" height="122" fill="#0c1a38"/><rect x="596" y="90" width="72" height="20" fill="#0c1a38"/><rect x="614" y="74" width="40" height="18" fill="#0c1a38"/>
+  <rect x="680" y="105" width="100" height="125" fill="#070d1c"/><rect x="696" y="88" width="70" height="20" fill="#070d1c"/>
+  <!-- Trees -->
+  <rect x="310" y="118" width="8" height="34" fill="#0a1e0a"/>
+  <rect x="302" y="96" width="24" height="26" fill="#1a4a1a"/><rect x="306" y="86" width="16" height="14" fill="#1a5a1a"/>
+  <rect x="354" y="116" width="8" height="36" fill="#0a1e0a"/>
+  <rect x="346" y="94" width="24" height="26" fill="#1a4a1a"/><rect x="350" y="84" width="16" height="14" fill="#1a5a1a"/>
+  <rect x="424" y="118" width="8" height="34" fill="#0a1e0a"/>
+  <rect x="416" y="96" width="24" height="26" fill="#1a4a1a"/><rect x="420" y="86" width="16" height="14" fill="#1a5a1a"/>
+  <rect x="462" y="115" width="8" height="37" fill="#0a1e0a"/>
+  <rect x="454" y="93" width="24" height="26" fill="#1a4a1a"/><rect x="458" y="83" width="16" height="14" fill="#1a5a1a"/>
+  <!-- Ground -->
+  <rect x="0" y="152" width="780" height="8" fill="#1a3a1a"/>
+  <rect x="0" y="160" width="780" height="70" fill="#060c10"/>
+  <!-- Water -->
+  <rect x="0" y="162" width="780" height="3" fill="#2ec4e8" opacity=".2"><animate attributeName="opacity" values=".2;.35;.2" dur="3s" repeatCount="indefinite"/></rect>
+  <rect x="0" y="168" width="780" height="2" fill="#2ec4e8" opacity=".1"><animate attributeName="opacity" values=".1;.2;.1" dur="4s" repeatCount="indefinite"/></rect>
+  <rect x="290" y="165" width="200" height="4" fill="#aaddff" opacity=".09"><animate attributeName="opacity" values=".09;.18;.09" dur="2.5s" repeatCount="indefinite"/></rect>
+  <!-- Lanterns -->
+  <rect x="362" y="118" width="7" height="10" fill="#2ec4e8" opacity=".75"><animate attributeName="opacity" values=".75;1;.75" dur="2.2s" repeatCount="indefinite"/></rect>
+  <rect x="406" y="119" width="7" height="10" fill="#2ec4e8" opacity=".6"><animate attributeName="opacity" values=".6;.95;.6" dur="1.9s" repeatCount="indefinite"/></rect>
+  <!-- Fireflies -->
+  <circle cx="282" cy="132" r="2" fill="#f2c840" opacity=".8"><animate attributeName="opacity" values=".8;0;.8" dur="2.1s" repeatCount="indefinite"/><animate attributeName="cx" values="282;288;282" dur="3.5s" repeatCount="indefinite"/><animate attributeName="cy" values="132;124;132" dur="3.5s" repeatCount="indefinite"/></circle>
+  <circle cx="316" cy="142" r="2" fill="#f2c840" opacity=".65"><animate attributeName="opacity" values=".65;0;.65" dur="2.8s" repeatCount="indefinite"/><animate attributeName="cx" values="316;310;316" dur="4s" repeatCount="indefinite"/></circle>
+  <circle cx="466" cy="128" r="2" fill="#f2c840" opacity=".75"><animate attributeName="opacity" values=".75;0;.75" dur="1.9s" repeatCount="indefinite"/></circle>
+  <circle cx="504" cy="138" r="2" fill="#f2c840" opacity=".55"><animate attributeName="opacity" values=".55;0;.55" dur="3.3s" repeatCount="indefinite"/></circle>
+  <!-- Characters center -->
+  <g filter="url(#gf)">
+    <!-- Jhane -->
+    <rect x="356" y="104" width="10" height="2" fill="#3a1505"/>
+    <rect x="355" y="106" width="1" height="5" fill="#3a1505"/>
+    <rect x="366" y="106" width="1" height="5" fill="#3a1505"/>
+    <rect x="356" y="106" width="10" height="5" fill="#e8aa80"/>
+    <rect x="358" y="107" width="2" height="2" fill="#1a0800"/>
+    <rect x="362" y="107" width="2" height="2" fill="#1a0800"/>
+    <rect x="358" y="110" width="6" height="1" fill="#c06040"/>
+    <rect x="355" y="111" width="12" height="6" fill="#ff88bb"/>
+    <rect x="353" y="111" width="2" height="5" fill="#ff88bb"/>
+    <rect x="367" y="111" width="2" height="5" fill="#ff88bb"/>
+    <rect x="357" y="117" width="3" height="4" fill="#3366cc"/>
+    <rect x="362" y="117" width="3" height="4" fill="#3366cc"/>
+    <animate attributeName="transform" values="translate(0,0);translate(0,-3);translate(0,0)" dur="1.8s" repeatCount="indefinite" calcMode="discrete"/>
+  </g>
+  <!-- Red string -->
+  <path d="M368,122 Q390,112 406,122" stroke="#ff5566" stroke-width="1.5" fill="none" opacity=".7">
+    <animate attributeName="d" values="M368,122 Q390,112 406,122;M368,119 Q390,116 406,119;M368,122 Q390,112 406,122" dur="2s" repeatCount="indefinite"/>
+  </path>
+  <!-- Leinad -->
+  <g filter="url(#gf)">
+    <rect x="392" y="104" width="10" height="3" fill="#1a0800"/>
+    <rect x="392" y="107" width="10" height="5" fill="#c88a60"/>
+    <rect x="394" y="108" width="2" height="2" fill="#1a0800"/>
+    <rect x="398" y="108" width="2" height="2" fill="#1a0800"/>
+    <rect x="394" y="111" width="6" height="1" fill="#905030"/>
+    <rect x="391" y="112" width="12" height="6" fill="#2ec4e8"/>
+    <rect x="389" y="112" width="2" height="5" fill="#2ec4e8"/>
+    <rect x="403" y="112" width="2" height="5" fill="#2ec4e8"/>
+    <rect x="393" y="118" width="3" height="4" fill="#1a2a4a"/>
+    <rect x="398" y="118" width="3" height="4" fill="#1a2a4a"/>
+    <animate attributeName="transform" values="translate(0,0);translate(0,-3);translate(0,0)" begin="0.9s" dur="1.8s" repeatCount="indefinite" calcMode="discrete"/>
+  </g>
+  <!-- Heart above -->
+  <text x="385" y="100" font-size="11" fill="#ff88bb" text-anchor="middle" opacity=".9">♥<animate attributeName="opacity" values=".9;.3;.9" dur="1.5s" repeatCount="indefinite"/><animate attributeName="y" values="100;94;100" dur="1.5s" repeatCount="indefinite"/></text>
+</svg>
+</div>
+
+<p class="end-quote reveal">
+  No matter how many worlds loaded between us…<br>
+  we still found the same spawn point.
+</p>
+<div class="end-final reveal">JHANE ROSE × LEINAD CLARK — CO-OP MODE FOREVER 💙</div>
+<div class="end-heart reveal" style="margin-top:24px;">♥</div>
+</section>
+
+<footer>
+  <div>BUILT WITH LOVE, PIXEL BY PIXEL 💙</div>
+  <div style="margin-top:7px;">JUNE 27, 2024 → FOREVER</div>
+  <div style="margin-top:7px;">JHANE ROSE × LEINAD CLARK</div>
+  <div style="margin-top:7px;opacity:.3;">"No matter how many worlds loaded between us… we still found the same spawn point."</div>
+</footer>
+</div><!-- end #ui -->
+
+<script>
+// ================================================================
+//  MILESTONE ENGINE
+// ================================================================
+const START = new Date('2024-06-27T00:00:00');
+function pad(n){ return String(Math.floor(Math.abs(n))).padStart(2,'0'); }
+
+function getCurrentMonths(){
+  const now = new Date();
+  let m = (now.getFullYear()-START.getFullYear())*12+(now.getMonth()-START.getMonth());
+  const d = new Date(START); d.setMonth(d.getMonth()+m); d.setDate(27); d.setHours(0,0,0,0);
+  if(now < d) m--;
+  return Math.max(0,m);
+}
+
+function getNextMilestone(){
+  const now = new Date();
+  let m = getCurrentMonths()+1;
+  const d = new Date(START); d.setMonth(d.getMonth()+m); d.setDate(27); d.setHours(0,0,0,0);
+  const isAnniv = m%12===0;
+  return {date:d, months:m, isAnniv, year:Math.floor(m/12)};
+}
+
+// Is today a celebration day? (within 24h of the 27th)
+function getTodayCelebration(){
+  const now = new Date();
+  const y=now.getFullYear(), mo=now.getMonth(), d=now.getDate();
+  const ms27 = new Date(y,mo,27,0,0,0,0);
+  const diff = now - ms27;
+  if(diff >= 0 && diff < 86400000){
+    const m = (y-START.getFullYear())*12+(mo-START.getMonth());
+    const isAnniv = mo===5 && d>=27; // June 27
+    return {active:true, months:m, isAnniv};
+  }
+  return {active:false};
+}
+
+function updateCountdown(){
+  const now = new Date();
+  const cur = getCurrentMonths();
+  const next = getNextMilestone();
+  const cel = getTodayCelebration();
+
+  // Hero title
+  document.getElementById('heroTitle').textContent = cur + ' Months Together';
+  document.getElementById('eyebrow').textContent = '✦ ' + cur + (cur===1?'ST':cur===2?'ND':cur===3?'RD':'TH') + ' MONTHSARY ✦';
+
+  // Celebration overlay
+  const ov = document.getElementById('celebrate-overlay');
+  const ct = document.getElementById('cel-text');
+  if(cel.active && !document.getElementById('cel-dismissed')){
+    ov.classList.add('active');
+    if(cel.isAnniv){
+      ct.className='celebrate-title anniv';
+      ct.innerHTML = '🏆 HAPPY '+ordinal(cel.months/12)+' ANNIVERSARY 🏆<br><span style="font-size:.5em;color:var(--soft)">Another Year in the Same World</span>';
+    } else {
+      ct.className='celebrate-title';
+      ct.innerHTML = '💙 HAPPY '+cel.months+' MONTHS TOGETHER 💙<br><span style="font-size:.45em;color:var(--soft)">Jhane Rose & Leinad Clark</span>';
+    }
+    // auto-hide after 6s
+    setTimeout(()=>{ov.style.opacity='0';setTimeout(()=>ov.classList.remove('active'),1200);},6000);
+  }
+
+  // Portal button on anniversaries
+  if(cel.active && cel.isAnniv){
+    document.getElementById('portalBtn').style.display='';
+  }
+
+  // Glow strength based on proximity to milestone
+  const diffMs = next.date - now;
+  const hoursLeft = diffMs / 3600000;
+  document.querySelectorAll('.cd-block').forEach(b=>{
+    if(hoursLeft < 24) b.classList.add('glow-strong');
+    else b.classList.remove('glow-strong');
+  });
+
+  // Months remaining to next
+  const monthsLeft = next.months - cur;
+  document.getElementById('cd-mo').textContent = pad(monthsLeft);
+
+  // Time
+  document.getElementById('cd-d').textContent = pad(diffMs/86400000);
+  document.getElementById('cd-h').textContent = pad((diffMs%86400000)/3600000);
+  document.getElementById('cd-m').textContent = pad((diffMs%3600000)/60000);
+  document.getElementById('cd-s').textContent = pad((diffMs%60000)/1000);
+
+  // Label
+  const nl = next.isAnniv ? '🏆 '+ordinal(next.year)+' ANNIVERSARY' : '💙 '+next.months+(next.months===1?'ST':next.months===2?'ND':next.months===3?'RD':'TH')+' MONTHSARY';
+  document.getElementById('cdHead').textContent = 'COUNTING DOWN TO '+next.months+(next.isAnniv?' (ANNIVERSARY!)':'TH MONTHSARY');
+  document.getElementById('nextLbl').textContent = nl+' — '+next.date.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+}
+
+function ordinal(n){
+  const s=['TH','ST','ND','RD'];
+  const v=n%100;
+  return n+(s[(v-20)%10]||s[v]||s[0]);
+}
+
+setInterval(updateCountdown,1000);
+updateCountdown();
+
+// ================================================================
+//  BACKGROUND SKY CANVAS
+// ================================================================
+const bgC = document.getElementById('bg-canvas');
+const bgX = bgC.getContext('2d');
+let isDayMode=false, dayAmt=0;
+
+function resizeBg(){bgC.width=window.innerWidth;bgC.height=window.innerHeight;}
+resizeBg();window.addEventListener('resize',resizeBg);
+
+const STARS=Array.from({length:240},()=>({x:Math.random(),y:Math.random()*.74,s:Math.random()*2.5+.5,tw:Math.random()*Math.PI*2,sp:Math.random()*.02+.006}));
+const CLOUDS=Array.from({length:8},(_,i)=>({x:Math.random()*2,y:.05+Math.random()*.3,spd:.0001+Math.random()*.00008,a:.05+Math.random()*.07,w:65+Math.random()*120}));
+
+let skyT=0,celebMode=false,celebIntensity=0;
+
+function lerpHex(a,b,t){
+  const p=s=>parseInt(s,16);
+  const ah=a.slice(1),bh=b.slice(1);
+  return '#'+[0,2,4].map(i=>Math.round(p(ah.slice(i,i+2))+(p(bh.slice(i,i+2))-p(ah.slice(i,i+2)))*t).toString(16).padStart(2,'0')).join('');
+}
+
+function drawBg(){
+  const W=bgC.width,H=bgC.height;
+  skyT+=.007;
+  dayAmt+=(isDayMode?.003:-.003);
+  dayAmt=Math.max(0,Math.min(1,dayAmt));
+
+  // Sky
+  const g=bgX.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,lerpHex('#030608','#1a3a7a',dayAmt*.45));
+  g.addColorStop(.45,lerpHex('#04080f','#1a4488',dayAmt*.3));
+  g.addColorStop(.8,lerpHex('#070d1c','#112255',dayAmt*.25));
+  g.addColorStop(1,lerpHex('#04080f','#091838',dayAmt*.2));
+  bgX.fillStyle=g;bgX.fillRect(0,0,W,H);
+
+  // Celebration tint
+  if(celebIntensity>0){
+    const cel=bgX.createRadialGradient(W*.5,H*.3,0,W*.5,H*.3,W*.6);
+    const isSixthMonth=new Date().getMonth()===5;
+    if(isSixthMonth){
+      cel.addColorStop(0,`rgba(242,200,64,${celebIntensity*.04})`);
+      cel.addColorStop(1,'transparent');
+    } else {
+      cel.addColorStop(0,`rgba(46,196,232,${celebIntensity*.05})`);
+      cel.addColorStop(1,'transparent');
+    }
+    bgX.fillStyle=cel;bgX.fillRect(0,0,W,H);
+  }
+
+  // Moon
+  const mA=1-dayAmt*.92,mX=W*.82,mY=H*.12;
+  if(mA>.02){
+    const mg=bgX.createRadialGradient(mX,mY,0,mX,mY,W*.14);
+    mg.addColorStop(0,`rgba(180,220,255,${.09*mA})`);mg.addColorStop(1,'transparent');
+    bgX.fillStyle=mg;bgX.fillRect(0,0,W,H);
+    bgX.save();bgX.globalAlpha=mA;
+    const bs=Math.max(8,W/88);
+    [[-1,0],[0,-1],[1,0],[0,1],[0,0],[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([px,py])=>{
+      const b=.88+.12*Math.sin(px*.9+py*.6);
+      bgX.fillStyle=`rgba(${Math.floor(220*b)},${Math.floor(240*b)},255,${b*.92})`;
+      bgX.fillRect(mX+px*bs-bs/2,mY+py*bs-bs/2,bs,bs);
+    });
+    bgX.restore();
+  }
+
+  // Sun (day)
+  if(dayAmt>.02){
+    const sX=W*.2,sY=H*.15;
+    const sg=bgX.createRadialGradient(sX,sY,0,sX,sY,W*.14);
+    sg.addColorStop(0,`rgba(255,230,100,${dayAmt*.14})`);sg.addColorStop(1,'transparent');
+    bgX.fillStyle=sg;bgX.fillRect(0,0,W,H);
+    bgX.save();bgX.globalAlpha=dayAmt;
+    const sbs=Math.max(7,W/100);
+    [[-1,-1],[0,-1],[1,-1],[-1,0],[0,0],[1,0],[-1,1],[0,1],[1,1]].forEach(([px,py])=>{
+      bgX.fillStyle='rgba(255,230,80,.93)';
+      bgX.fillRect(sX+px*sbs-sbs/2,sY+py*sbs-sbs/2,sbs,sbs);
+    });
+    bgX.restore();
+  }
+
+  // Stars
+  const stA=1-dayAmt;
+  if(stA>.02){
+    STARS.forEach(s=>{
+      s.tw+=s.sp;
+      const a=(.35+.65*Math.abs(Math.sin(s.tw)))*stA;
+      bgX.fillStyle=`rgba(200,228,255,${a})`;
+      bgX.fillRect(s.x*W,s.y*H,s.s*(0.9+0.1*Math.abs(Math.sin(s.tw))),s.s*(0.9+0.1*Math.abs(Math.sin(s.tw))));
+    });
+  }
+
+  // Clouds
+  CLOUDS.forEach(c=>{
+    c.x-=c.spd;if(c.x<-.28)c.x=1.28;
+    bgX.save();bgX.globalAlpha=c.a*(.55+dayAmt*.45);
+    bgX.fillStyle=isDayMode?'#fff':'#b4e4f8';
+    const cx=c.x*W,cy=c.y*H,bs=11;
+    [[0,1],[1,1],[2,1],[3,1],[4,1],[5,1],[6,1],[1,0],[2,0],[3,0],[4,0],[5,0],[0,2],[1,2],[2,2],[3,2],[4,2],[5,2],[6,2]].forEach(([bx,by])=>bgX.fillRect(cx+bx*bs-c.w/2,cy+by*bs-15,bs,bs));
+    bgX.restore();
+  });
+
+  // Water reflection
+  const wY=H*.77;
+  for(let i=0;i<4;i++){
+    const wa=(.18-i*.04)*(.7+.3*Math.sin(skyT*2+i));
+    bgX.fillStyle=`rgba(46,196,232,${wa})`;bgX.fillRect(0,wY+i*10,W,5);
+  }
+
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+function toggleDayNight(){isDayMode=!isDayMode;}
+
+// ================================================================
+//  FIREWORKS CANVAS
+// ================================================================
+const fxC = document.getElementById('fx-canvas');
+const fxX = fxC.getContext('2d');
+function resizeFx(){fxC.width=window.innerWidth;fxC.height=window.innerHeight;}
+resizeFx();window.addEventListener('resize',resizeFx);
+
+const rockets=[];
+const particles2=[];
+let fireworksActive=false,fireworkInterval=null;
+
+function launchRocket(isAnniv){
+  const x=window.innerWidth*.1+Math.random()*window.innerWidth*.8;
+  const y=window.innerHeight*.6+Math.random()*window.innerHeight*.2;
+  const targetY=window.innerHeight*.1+Math.random()*window.innerHeight*.4;
+  rockets.push({x,y,tx:x+(Math.random()-.5)*80,ty:targetY,speed:12,isAnniv,life:0,maxLife:Math.ceil((y-targetY)/12)});
+}
+
+function explode(x,y,isAnniv){
+  const count=isAnniv?80:55;
+  for(let i=0;i<count;i++){
+    const angle=Math.random()*Math.PI*2;
+    const spd=1+Math.random()*6;
+    const hue=isAnniv?(40+Math.random()*30):(180+Math.random()*40);
+    const color=isAnniv?`hsl(${hue},90%,65%)`:`hsl(${hue},85%,65%)`;
+    particles2.push({x,y,vx:Math.cos(angle)*spd,vy:Math.sin(angle)*spd,color,a:1,size:isAnniv?3:2.5,grav:.07,life:0,maxLife:60+Math.random()*50});
+  }
+  // Pixel heart burst on anniversary
+  if(isAnniv){
+    const heartColor='#ff88cc';
+    for(let i=0;i<12;i++){
+      const angle=Math.random()*Math.PI*2,spd=3+Math.random()*4;
+      particles2.push({x,y,vx:Math.cos(angle)*spd,vy:Math.sin(angle)*spd,color:heartColor,a:1,size:4,grav:.05,life:0,maxLife:90,isHeart:true});
+    }
+  }
+}
+
+function drawFx(){
+  fxX.clearRect(0,0,fxC.width,fxC.height);
+
+  // Rockets
+  for(let i=rockets.length-1;i>=0;i--){
+    const r=rockets[i];
+    const progress=r.life/r.maxLife;
+    r.x+=(r.tx-r.x)*.08;
+    r.y-=r.speed*(1-progress*.3);
+    r.life++;
+    if(r.life>=r.maxLife){explode(r.x,r.y,r.isAnniv);rockets.splice(i,1);continue;}
+    fxX.save();fxX.globalAlpha=.9;
+    fxX.fillStyle=r.isAnniv?'#f2c840':'#2ec4e8';
+    fxX.fillRect(r.x-2,r.y-2,4,4);
+    fxX.globalAlpha=.4;
+    fxX.fillRect(r.x-1,r.y+4,2,8);
+    fxX.restore();
+  }
+
+  // Particles
+  for(let i=particles2.length-1;i>=0;i--){
+    const p=particles2[i];
+    p.x+=p.vx;p.y+=p.vy;p.vy+=p.grav;p.vx*=.98;p.a-=.015;p.life++;
+    if(p.a<=0||p.life>p.maxLife){particles2.splice(i,1);continue;}
+    fxX.save();fxX.globalAlpha=p.a;
+    fxX.fillStyle=p.color;
+    if(p.isHeart){
+      fxX.font=p.size*4+'px serif';
+      fxX.fillText('♥',p.x-p.size*2,p.y+p.size*2);
+    } else {
+      fxX.fillRect(p.x-p.size/2,p.y-p.size/2,p.size,p.size);
+    }
+    fxX.restore();
+  }
+  requestAnimationFrame(drawFx);
+}
+drawFx();
+
+function startFireworks(isAnniv){
+  fireworksActive=true;
+  celebMode=true;celebIntensity=1;
+  if(fireworkInterval)clearInterval(fireworkInterval);
+  const interval=isAnniv?1200:2000;
+  fireworkInterval=setInterval(()=>launchRocket(isAnniv),interval);
+  launchRocket(isAnniv);launchRocket(isAnniv);
+}
+
+function stopFireworks(){
+  fireworksActive=false;celebMode=false;celebIntensity=0;
+  if(fireworkInterval){clearInterval(fireworkInterval);fireworkInterval=null;}
+}
+
+// Auto-start on celebration days
+const todayCel=getTodayCelebration();
+if(todayCel.active){
+  setTimeout(()=>startFireworks(todayCel.isAnniv),2500);
+}
+
+// ================================================================
+//  FLOATING PARTICLES
+// ================================================================
+const parts3=[];
+const PTYPES=['heart','star','block','firefly'];
+
+function spawnPart(){
+  const t=PTYPES[Math.floor(Math.random()*PTYPES.length)];
+  parts3.push({x:Math.random()*window.innerWidth,y:window.innerHeight+16,t,s:3+Math.random()*8,vx:(Math.random()-.5)*.7,vy:-(0.3+Math.random()*.9),a:.45+Math.random()*.5,life:0,maxLife:170+Math.random()*230});
+}
+setInterval(spawnPart,260);
+
+function animParts(){
+  // drawn on fxC above, but actually we blend here as overlay on bg
+  // These are drawn via fxC after the fireworks loop — no separate canvas needed
+}
+
+// Cursor trail
+const TRAIL=[];
+document.addEventListener('mousemove',e=>{
+  const cur=document.getElementById('cursor');
+  cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';
+  if(Math.random()>.68){
+    parts3.push({x:e.clientX,y:e.clientY,t:Math.random()>.5?'heart':'star',s:3+Math.random()*5,vx:(Math.random()-.5)*.9,vy:-.4-Math.random()*.55,a:.55,life:0,maxLife:50});
+  }
+});
+
+// Extended fxC draw to include floating parts
+const _origDrawFx=drawFx;
+function drawFxFull(){
+  fxX.clearRect(0,0,fxC.width,fxC.height);
+  // Rockets
+  for(let i=rockets.length-1;i>=0;i--){
+    const r=rockets[i];const progress=r.life/r.maxLife;
+    r.x+=(r.tx-r.x)*.08;r.y-=r.speed*(1-progress*.3);r.life++;
+    if(r.life>=r.maxLife){explode(r.x,r.y,r.isAnniv);rockets.splice(i,1);continue;}
+    fxX.save();fxX.globalAlpha=.9;fxX.fillStyle=r.isAnniv?'#f2c840':'#2ec4e8';
+    fxX.fillRect(r.x-2,r.y-2,4,4);fxX.globalAlpha=.4;fxX.fillRect(r.x-1,r.y+4,2,8);fxX.restore();
+  }
+  // Explosion particles
+  for(let i=particles2.length-1;i>=0;i--){
+    const p=particles2[i];p.x+=p.vx;p.y+=p.vy;p.vy+=p.grav;p.vx*=.98;p.a-=.014;p.life++;
+    if(p.a<=0||p.life>p.maxLife){particles2.splice(i,1);continue;}
+    fxX.save();fxX.globalAlpha=p.a;fxX.fillStyle=p.color;
+    if(p.isHeart){fxX.font=p.size*4+'px serif';fxX.fillText('♥',p.x-p.size*2,p.y+p.size*2);}
+    else fxX.fillRect(p.x-p.size/2,p.y-p.size/2,p.size,p.size);
+    fxX.restore();
+  }
+  // Floating ambient parts
+  for(let i=parts3.length-1;i>=0;i--){
+    const p=parts3[i];p.x+=p.vx;p.y+=p.vy;p.life++;
+    if(p.life>p.maxLife||p.y<-30){parts3.splice(i,1);continue;}
+    const fade=1-p.life/p.maxLife;
+    fxX.save();fxX.globalAlpha=p.a*fade;fxX.translate(p.x,p.y);
+    if(p.t==='heart'){
+      fxX.fillStyle='#ff88cc';
+      [[1,0],[2,0],[4,0],[5,0],[0,1],[1,1],[2,1],[3,1],[4,1],[5,1],[6,1],[0,2],[1,2],[2,2],[3,2],[4,2],[5,2],[6,2],[1,3],[2,3],[3,3],[4,3],[5,3],[2,4],[3,4],[4,4],[3,5]].forEach(([x,y])=>{const b=p.s/7;fxX.fillRect(x*b-p.s/2,y*b-p.s/2,b,b);});
+    } else if(p.t==='star'){
+      fxX.fillStyle='#7dd8f0';const s=p.s;
+      fxX.fillRect(-s/2,-s/8,s,s/4);fxX.fillRect(-s/8,-s/2,s/4,s);
+      const d=s*.35;
+      [[-d,-d],[d,-d],[-d,d],[d,d]].forEach(([dx,dy])=>fxX.fillRect(dx-s*.12,dy-s*.12,s*.24,s*.24));
+    } else if(p.t==='block'){
+      fxX.fillStyle='rgba(46,196,232,.6)';fxX.fillRect(-p.s/2,-p.s/2,p.s,p.s);
+      fxX.strokeStyle='rgba(141,220,240,.3)';fxX.lineWidth=1;fxX.strokeRect(-p.s/2,-p.s/2,p.s,p.s);
+    } else {
+      fxX.fillStyle='#f2c840';fxX.beginPath();fxX.arc(0,0,p.s/2,0,Math.PI*2);fxX.fill();
+    }
+    fxX.restore();
+  }
+  // Lanterns on celebration day
+  if(celebMode){
+    celebIntensity=Math.min(1,celebIntensity+.005);
+    LANTERNS.forEach(l=>{
+      l.y-=.4+l.spd;l.x+=Math.sin(l.phase)*0.4;l.phase+=.02;l.a-=.0008;
+      if(l.y<-30||l.a<=0){resetLantern(l);}
+      fxX.save();fxX.globalAlpha=l.a*.8;
+      fxX.fillStyle=l.isGold?'rgba(242,200,64,.8)':'rgba(46,196,232,.7)';
+      fxX.fillRect(l.x-5,l.y-7,10,14);
+      fxX.fillStyle=l.isGold?'rgba(255,230,120,.6)':'rgba(141,220,240,.5)';
+      fxX.fillRect(l.x-7,l.y-5,14,10);
+      const glow=fxX.createRadialGradient(l.x,l.y,0,l.x,l.y,25);
+      const gc=l.isGold?`rgba(242,200,64,${l.a*.3})`:`rgba(46,196,232,${l.a*.25})`;
+      glow.addColorStop(0,gc);glow.addColorStop(1,'transparent');
+      fxX.fillStyle=glow;fxX.fillRect(l.x-25,l.y-25,50,50);
+      fxX.restore();
+    });
+  }
+  requestAnimationFrame(drawFxFull);
+}
+
+// Lanterns
+const LANTERNS=Array.from({length:20},(_,i)=>({x:0,y:0,spd:0,phase:0,a:0,isGold:i<10}));
+function resetLantern(l){
+  const cel=getTodayCelebration();
+  l.x=Math.random()*window.innerWidth;
+  l.y=window.innerHeight*.7+Math.random()*window.innerHeight*.3;
+  l.spd=0.2+Math.random()*.5;l.phase=Math.random()*Math.PI*2;
+  l.a=0.4+Math.random()*.55;
+  l.isGold=cel.active&&cel.isAnniv?Math.random()>.4:Math.random()>.7;
+}
+LANTERNS.forEach(resetLantern);
+
+// Cancel the old draw loop and start the full one
+(function(){
+  // The old drawFx RAF started — we just start the new one
+  drawFxFull();
+})();
+
+// ================================================================
+//  WORLD TABS
+// ================================================================
+function switchTab(id){
+  document.querySelectorAll('.world-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.wtab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ================================================================
+//  SCROLL REVEAL
+// ================================================================
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const delay=e.target.dataset.delay||0;
+      setTimeout(()=>e.target.classList.add('vis'),parseInt(delay));
+    }
+  });
+},{threshold:.1});
+document.querySelectorAll('.reveal,.tl-item').forEach((el,i)=>{
+  if(el.classList.contains('tl-item')) el.style.transitionDelay=(i*100)+'ms';
+  observer.observe(el);
+});
+
+// ================================================================
+//  GENERATIVE MUSIC
+// ================================================================
+let aCtx=null,musicOn=false,musicTimer2=null,mStep=0;
+function toggleMusic(){
+  const btn=document.getElementById('musicBtn');
+  if(!musicOn){
+    if(!aCtx) aCtx=new(window.AudioContext||window.webkitAudioContext)();
+    if(aCtx.state==='suspended') aCtx.resume();
+    musicOn=true;btn.textContent='♪ ON';btn.style.color='var(--gold)';
+    scheduleMusic();musicTimer2=setInterval(scheduleMusic,3840);
+  } else {
+    if(aCtx) aCtx.suspend();
+    musicOn=false;btn.textContent='♪ OFF';btn.style.color='var(--cyan)';
+  }
+}
+function scheduleMusic(){
+  if(!aCtx||!musicOn) return;
+  const pent=[261.63,293.66,329.63,392,440,523.25,587.33,659.25];
+  const mel=[0,2,4,7,9,7,4,2,0,4,7,9,7,4,2,0];
+  const cel=getTodayCelebration();
+  const vol=cel.active?.07:.055;
+  const t=aCtx.currentTime;
+  for(let i=0;i<8;i++){
+    const n=mel[(mStep+i)%mel.length];
+    const o=aCtx.createOscillator(),g=aCtx.createGain();
+    o.connect(g);g.connect(aCtx.destination);
+    o.type='triangle';o.frequency.setValueAtTime(pent[n%pent.length],t+i*.48);
+    g.gain.setValueAtTime(0,t+i*.48);g.gain.linearRampToValueAtTime(vol,t+i*.48+.06);
+    g.gain.exponentialRampToValueAtTime(.001,t+i*.48+.44);
+    o.start(t+i*.48);o.stop(t+i*.48+.48);
+    const b=aCtx.createOscillator(),gb=aCtx.createGain();
+    b.connect(gb);gb.connect(aCtx.destination);
+    b.type='sine';b.frequency.setValueAtTime(pent[n%pent.length]/2,t+i*.96);
+    gb.gain.setValueAtTime(0,t+i*.96);gb.gain.linearRampToValueAtTime(vol*.6,t+i*.96+.08);
+    gb.gain.exponentialRampToValueAtTime(.001,t+i*.96+.88);
+    b.start(t+i*.96);b.stop(t+i*.96+.96);
+  }
+  mStep=(mStep+8)%mel.length;
+}
+
+// ================================================================
+//  PORTAL
+// ================================================================
+function openPortal(){
+  document.getElementById('anniv-portal').classList.add('open');
+}
+
+// Check near-midnight intensification
+setInterval(()=>{
+  const cel=getTodayCelebration();
+  if(cel.active && fireworksActive){
+    const now=new Date();
+    const minutesToMidnight=(23-now.getHours())*60+(59-now.getMinutes());
+    if(minutesToMidnight<30 && fireworkInterval){
+      clearInterval(fireworkInterval);
+      fireworkInterval=setInterval(()=>launchRocket(cel.isAnniv),800);
+    }
+  }
+},60000);
+</script>
+</body>
+</html>
